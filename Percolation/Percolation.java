@@ -4,7 +4,6 @@ public class Percolation {
 	private int n, numOpenSites;
 	private WeightedQuickUnionUF uf;
 	private boolean[] blocked;
-	private boolean[] full;
 
 	public Percolation(int num) {
 		// check whether the parameter is valid
@@ -16,7 +15,6 @@ public class Percolation {
 		n = num;
 		uf = new WeightedQuickUnionUF(n*n+2);
 		blocked = new boolean[n*n+2]; // 2 extra virtual sites
-		full = new boolean[n*n+2];
 
 		for (int i = 1; i <= n*n; ++i) {
 			blocked[i] = true;
@@ -41,19 +39,19 @@ public class Percolation {
 			numOpenSites++;
 			blocked[id] = false;
 			// build connections for real sites
-			if (row + 1 <= n && isOpen(row+1, col)) {
+			if (row < n && isOpen(row+1, col)) {
 				int neighbour = index(row+1, col);
 				uf.union(id, neighbour);
 			}
-			if (row - 1 > 0 && isOpen(row-1, col)) {
+			if (row > 1 && isOpen(row-1, col)) {
 				int neighbour = index(row-1, col);
 				uf.union(id, neighbour);
 			}
-			if (col + 1 <= n && isOpen(row, col+1)) {
+			if (col < n && isOpen(row, col+1)) {
 				int neighbour = index(row, col+1);
 				uf.union(id, neighbour);
 			}
-			if (col - 1 > 0 && isOpen(row, col-1)) {
+			if (col > 1 && isOpen(row, col-1)) {
 				int neighbour = index(row, col-1);
 				uf.union(id, neighbour);
 			}
@@ -61,13 +59,9 @@ public class Percolation {
 			// build connections for virtual sites
 			if (row == 1) {
 				uf.union(0, id);
-				full[id] = true;
 			}
 			if (row == n) {
 				uf.union(n*n+1, id);
-				if (full[id]) {
-					full[n*n+1] = true;
-				}
 			}
 		}
 	}
@@ -79,10 +73,7 @@ public class Percolation {
 
 	public boolean isFull(int row, int col) {
 		// check if site is full
-		//if (!full[index(row, col)]) {
-		//	full[index(row, col)] = uf.connected(0, index(row, col));
-		//}
-		return full[index(row, col)];
+		return uf.connected(0, index(row, col));
 	}
 
 	public int numberOfOpenSites() {
@@ -92,9 +83,6 @@ public class Percolation {
 
 	public boolean percolates() {
 		// check if the system percolates
-		if (!full[n*n+1]) {
-			full[n*n+1] = uf.connected(0, n*n+1);
-		}
-		return full[n*n+1];
+		return uf.connected(0, n*n+1);
 	}
 }
