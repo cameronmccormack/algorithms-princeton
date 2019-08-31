@@ -4,6 +4,8 @@ import edu.princeton.cs.algs4.StdStats;
 public class PercolationStats {
 	private double[] ratio;
 	private int trials, numSites;
+    private double CONF_95 = 1.96;
+    private double sd;
 
 	public PercolationStats(int n, int trials) {
 		if (n <= 0 || trials <= 0) {
@@ -29,6 +31,7 @@ public class PercolationStats {
 			}
 			ratio[t] = p.numberOfOpenSites() * 1.0 / numSites;
 		}
+        sd = stddev();
 	}
 
 	public double mean() {
@@ -42,12 +45,12 @@ public class PercolationStats {
 
 	public double confidenceLo() {
 		// lower bound of 95% confidence interval
-		return mean() - 1.96*stddev() / Math.sqrt(trials);
+		return mean() - CONF_95*sd / Math.sqrt(trials);
 	}
 
 	public double confidenceHi() {
 		// upper bound of 95% confidence interval
-		return mean() + 1.96*stddev() / Math.sqrt(trials);
+		return mean() + CONF_95*sd / Math.sqrt(trials);
 	}
 
 	public static void main(String[] args) {

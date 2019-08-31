@@ -29,7 +29,7 @@ public class Percolation {
 	private int index(int row, int col) {
 		// return index of array site
 		if (row <= 0 || row > n || col <= 0 || col > n) {
-			throw new IndexOutOfBoundsException();
+			throw new IllegalArgumentException();
 		}
 		return (row-1)*n + col;
 	}
@@ -79,9 +79,9 @@ public class Percolation {
 
 	public boolean isFull(int row, int col) {
 		// check if site is full
-		if (!full[index(row, col)]) {
-			full[index(row, col)] = uf.connected(0, index(row, col));
-		}
+		//if (!full[index(row, col)]) {
+		//	full[index(row, col)] = uf.connected(0, index(row, col));
+		//}
 		return full[index(row, col)];
 	}
 
