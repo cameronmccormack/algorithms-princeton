@@ -12,7 +12,7 @@ public class Deque<Item> implements Iterable<Item> {
     private Node last;
     private int n;
 
-    // construct and empty deque
+    // construct an empty deque
     public Deque() {
         first = null;
         last = null;
@@ -114,7 +114,7 @@ public class Deque<Item> implements Iterable<Item> {
         return new DequeIterator();
     }
 
-    // iterator class over items from fron to back
+    // iterator class over items from front to back
     private class DequeIterator implements Iterator<Item> {
         private Node current = first;
 
@@ -136,7 +136,7 @@ public class Deque<Item> implements Iterable<Item> {
         }
     }
 
-    // unit testing (to be updated)
+    // quick test
     public static void main(String[] args) {
         Deque<String> queue = new Deque<String>();
         System.out.println(queue.isEmpty());

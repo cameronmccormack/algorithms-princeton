@@ -115,7 +115,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         System.out.format("Length: %d | n: %d | first: %d | last: %d\n", q.length, n, first, last);
     }
 
-    // testing
+    // quick test
     public static void main(String[] args) {
         RandomizedQueue<Integer> rq = new RandomizedQueue<Integer>();
         rq.status();
