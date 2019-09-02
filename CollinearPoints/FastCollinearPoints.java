@@ -34,12 +34,10 @@ public class FastCollinearPoints {
         }
         
         for (int i = 0; i < copy.length - 3; i++) {
-            Arrays.sort(copy);
-
             // Sort the points according to the slopes they makes with p.
-            // Check if any 3 (or more) adjacent points in the sorted order
-            // have equal slopes with respect to p. If so, these points,
-            // together with p, are collinear.
+            // If any 3 (or more) adjacent points in the sorted order have
+            // equal slopes with respect to p these points, together with
+            // p, are collinear.
 
             Arrays.sort(copy, copy[i].slopeOrder());
 
