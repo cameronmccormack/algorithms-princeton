@@ -1,4 +1,5 @@
 import java.util.LinkedList;
+import java.util.Arrays;
 
 public class Board {
     private int n;
@@ -7,6 +8,10 @@ public class Board {
     // create a board from an n-by-n array of tiles,
     // where tiles[row][col] = tile at (row, col)
     public Board(int[][] tiles) {
+        if (tiles == null) {
+            throw new IllegalArgumentException();
+        }
+        
         n = tiles.length;
 
         int[][] copy = new int[n][n];
@@ -95,13 +100,14 @@ public class Board {
         if (y == this) {
             return true;
         }
-        if (y == null || !(y instanceof Board)) {
+        if (y == null) {
             return false;
         }
-        if (y.toString() == this.toString()) {
-            return true;
+        if (y.getClass() != this.getClass()) {
+            return false;
         }
-        return false;
+        Board that = (Board) y;
+        return Arrays.deepEquals(this.board, that.board);
     }
 
     private int[][] swap(int row1, int col1, int row2, int col2) {
@@ -136,16 +142,16 @@ public class Board {
         }
 
         if (spaceRow > 0) {
-            neighbors.add(new Board(swap(spaceRow, spaceCol, spaceRow+1, spaceCol)));
-        }
-        if (spaceRow < n - 1) { 
             neighbors.add(new Board(swap(spaceRow, spaceCol, spaceRow-1, spaceCol)));
         }
+        if (spaceRow < n - 1) { 
+            neighbors.add(new Board(swap(spaceRow, spaceCol, spaceRow+1, spaceCol)));
+        }
         if (spaceCol > 0) {
-            neighbors.add(new Board(swap(spaceRow, spaceCol, spaceRow, spaceCol+1)));
+            neighbors.add(new Board(swap(spaceRow, spaceCol, spaceRow, spaceCol-1)));
         }
         if (spaceCol < n - 1) {
-            neighbors.add(new Board(swap(spaceRow, spaceCol, spaceRow, spaceCol-1)));
+            neighbors.add(new Board(swap(spaceRow, spaceCol, spaceRow, spaceCol+1)));
         }
 
         return neighbors;
@@ -154,10 +160,9 @@ public class Board {
     // a board that is obtained by exchanging any pair of tiles
     public Board twin() {
         for (int i = 0; i < n; i++) {
-            for (int j = 0; j < n; j++) {
-                if ((board[i][j] != 0) && (board[i][j+1] != 0)) {
-                    return new Board(swap(i, j, i, j+1));
-                }
+            if ((board[i][0] != 0) && (board[i][1] != 0)) {
+                return new Board(swap(i, 0, i, 1));
+                
             }
         }
         throw new RuntimeException();

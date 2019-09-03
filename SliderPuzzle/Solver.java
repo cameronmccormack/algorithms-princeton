@@ -12,6 +12,10 @@ public class Solver {
 
     // find a solution to the initial board (using the A* algorithm)
     public Solver(Board initial) {
+        if (initial == null) {
+            throw new IllegalArgumentException();
+        }
+
         MinPQ<SolverStep> steps = new MinPQ<>(new SolverStepComparator());
         steps.insert(new SolverStep(initial, 0, null));
 
