@@ -2,7 +2,6 @@ import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.RectHV;
 import edu.princeton.cs.algs4.StdDraw;
 import java.util.LinkedList;
-import java.util.List;
 
 public class KdTree {
 
@@ -62,7 +61,7 @@ public class KdTree {
     // add the point to the set (if it is not already in the set)
     public void insert(Point2D p) {
         if (p == null) {
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
         }
         root = put(root, p.x(), p, 0);
     }
@@ -70,7 +69,7 @@ public class KdTree {
     // does the set contain point p?
     public boolean contains(Point2D p) {
         if (p == null) {
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
         }
         return isIn(root, p.x(), p, 0);
     }
@@ -119,8 +118,11 @@ public class KdTree {
 
     // all points that are inside the rectangle (or on the boundary)
     public Iterable<Point2D> range(RectHV rect) {
-        if (rect == null || root == null) {
-            throw new NullPointerException();
+        if (rect == null) {
+            throw new IllegalArgumentException();
+        }
+        if (root == null) {
+            return null;
         }
         LinkedList<Point2D> list = new LinkedList<Point2D>();
         range(root, rect, 0, list);
@@ -148,7 +150,7 @@ public class KdTree {
                 range(node.right, rect, nextLevel, list);
             }
             // lower or left?
-            if (node.key >= min && node.key > max) {
+            if (node.key > min && node.key >= max) {
                 range(node.left, rect, nextLevel, list);
             }
             // higher or right?
@@ -160,47 +162,50 @@ public class KdTree {
 
     // a nearest neightbor in the set to point p
     public Point2D nearest(Point2D p) {
-        if (p == null || root == null) {
-            throw new NullPointerException();
+        if (p == null) {
+            throw new IllegalArgumentException();
         }
-        return nearestNeighbor(root, p, 0, new Neighbor(root.value, Double.MAX_VALUE)).point;
+        if (root == null) {
+            return null;
+        }
+        return nearest(root, p, 0, new Champion(root.value, Double.POSITIVE_INFINITY)).point;
     }
 
-    private class Neighbor {
+    private class Champion {
         private Point2D point;
         private double dist;
-        public Neighbor(Point2D point, double dist) {
+        public Champion(Point2D point, double dist) {
             this.point = point;
             this.dist = dist;
         }
     }
 
-    private Neighbor nearestNeighbor(Node node, Point2D p, int level, Neighbor neighbor) {
-        if (node == null) {
-            return neighbor;
-        }
-        int nextLevel = level + 1;
+    private Champion nearest(Node node, Point2D p, int level, Champion champion) {
+        if (node == null) return champion;
+        int l = level + 1;
         boolean isX = level % 2 == 0;
         double key = isX ? p.x() : p.y();
-        double distance = p.distanceSquaredTo(node.value);
-        Neighbor next = neighbor;
-        if (distance < next.dist) {
-            next = new Neighbor(node.value, distance);
+        // check how close is the current point
+        double currDist = p.distanceSquaredTo(node.value);
+        Champion nextChampion = champion;
+        if (currDist < nextChampion.dist) {
+            nextChampion = new Champion(node.value, currDist);
         }
-        if (key <= node.key) {
-            next = nearestNeighbor(node.left, p, nextLevel, next);
-            double estimatedDistance = node.key - key;
-            if (next.dist > estimatedDistance) {
-                next = nearestNeighbor(node.right, p, nextLevel, next);
+        boolean goLeft = (key <= node.key);
+        if (goLeft) {
+            nextChampion = nearest(node.left, p, l, nextChampion);
+            double estDist = node.key - key;
+            if (nextChampion.dist > estDist) {
+                nextChampion = nearest(node.right, p, l, nextChampion);
             }
         } else {
-            next = nearestNeighbor(node.right, p, nextLevel, next);
-            double estimatedDistance = node.key - key;
-            if (next.dist > estimatedDistance) {
-                next = nearestNeighbor(node.left, p, nextLevel, next);
+            nextChampion = nearest(node.right, p, l, nextChampion);
+            double estDist = node.key - key;
+            if (nextChampion.dist > estDist) {
+                nextChampion = nearest(node.left, p, l, nextChampion);
             }
         }
-        return next;
+        return nextChampion;
     }
 
     // quick test
