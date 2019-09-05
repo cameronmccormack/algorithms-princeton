@@ -1,5 +1,6 @@
 import edu.princeton.cs.algs4.Point2D;
 import edu.princeton.cs.algs4.RectHV;
+import edu.princeton.cs.algs4.StdDraw;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.TreeSet;
@@ -42,8 +43,8 @@ public class PointSET {
 
     // draw all points to standard draw
     public void draw() {
-        for (Point2D point : set) {
-            StdDraw.point(point.x(), point.y());
+        for (Point2D p : points) {
+            StdDraw.point(p.x(), p.y());
         }
     }
 
@@ -60,7 +61,7 @@ public class PointSET {
                 contained.add(p);
             }
         }
-    return pointsIn;
+    return contained;
     }
 
     // a nearest neighbour in the set to point p
@@ -72,7 +73,7 @@ public class PointSET {
             return null;
         }
         Point2D next = points.ceiling(p);
-        Point2d prev = points.floor(p);
+        Point2D prev = points.floor(p);
         if (next == null && prev == null) {
             return null;
         }
@@ -82,11 +83,11 @@ public class PointSET {
         double minDistance = Math.min(distanceToNext, distanceToPrev);
 
         Point2D min = new Point2D(p.x(), p.y() - minDistance);
-        Point2D max = new Point2D(p.x(), p.y() + maxDistance);
+        Point2D max = new Point2D(p.x(), p.y() + minDistance);
         Point2D nearest = next == null ? prev : next;
 
-        for (Point2D testPoint : points.subSet(minPoint, true, maxPoint, true)) {
-            if (p.distanceTo(testPoint) < pdistanceTo(nearest)) {
+        for (Point2D testPoint : points.subSet(min, true, max, true)) {
+            if (p.distanceTo(testPoint) < p.distanceTo(nearest)) {
                 nearest = testPoint;
             }
         }
