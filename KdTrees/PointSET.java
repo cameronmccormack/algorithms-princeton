@@ -26,7 +26,7 @@ public class PointSET {
     // add the point to the set (if it is not already in the set)
     public void insert(Point2D p) {
         if (p == null) {
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
         }
         if (!points.contains(p)) {
             points.add(p);
@@ -36,7 +36,7 @@ public class PointSET {
     // does the set contain point p?
     public boolean contains(Point2D p) {
         if (p == null) {
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
         }
         return points.contains(p);
     }
@@ -51,7 +51,7 @@ public class PointSET {
     // all points that are inside the rectangle
     public Iterable<Point2D> range(RectHV rect) {
         if (rect == null) {
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
         }
         Point2D min = new Point2D(rect.xmin(), rect.ymin());
         Point2D max = new Point2D(rect.xmax(), rect.ymax());
@@ -67,7 +67,7 @@ public class PointSET {
     // a nearest neighbour in the set to point p
     public Point2D nearest(Point2D p) {
         if (p == null) {
-            throw new NullPointerException();
+            throw new IllegalArgumentException();
         }
         if (isEmpty()) {
             return null;
@@ -78,8 +78,8 @@ public class PointSET {
             return null;
         }
         
-        double distanceToNext = next == null ? Double.MAX_VALUE : p.distanceTo(next);
-        double distanceToPrev = prev == null ? Double.MAX_VALUE : p.distanceTo(prev);
+        double distanceToNext = next == null ? Double.POSITIVE_INFINITY : p.distanceTo(next);
+        double distanceToPrev = prev == null ? Double.POSITIVE_INFINITY : p.distanceTo(prev);
         double minDistance = Math.min(distanceToNext, distanceToPrev);
 
         Point2D min = new Point2D(p.x(), p.y() - minDistance);
