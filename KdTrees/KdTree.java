@@ -4,48 +4,33 @@ import edu.princeton.cs.algs4.StdDraw;
 import java.util.LinkedList;
 
 public class KdTree {
+    private static final double XMIN = 0.0;
+    private static final double XMAX = 1.0;
+    private static final double YMIN = 0.0;
+    private static final double YMAX = 1.0;
 
+    private int size;
     private Node root;
-    private int size = 0;
-
-    // construct an empty set of points
-    public KdTree() {
-        // nothing required to create an empty set of points
-    }
 
     private class Node {
-        private double key;
-        private Point2D value;
-        private Node left, right;
-        public Node(double key, Point2D value) {
-            this.key = key;
-            this.value = value;
+        private Point2D p;
+        private RectHV rect;
+
+        private Node left;
+        private Node right;
+
+        private Node(Point2D value, RectHV inRect) {
+            p = value;
+            rect = inRect;
+
+            left = null;
+            right = null;
         }
     }
 
-    private Node put(Node node, double key, Point2D value, int level) {
-        if (node == null) {
-            size++;
-            return new Node(key, value);
-        }
-
-        boolean isX = level % 2 == 0;
-        double nextKey = isX ? value.y() : value.x();
-
-        int compare = Double.compare(key, node.key);
-        int nextLevel = level + 1;
-        if (compare < 0) {
-            node.left = put(node.left, nextKey, value, nextLevel);
-        }
-        if (compare > 0) {
-            node.right = put(node.right, nextKey, value, nextLevel);
-        }
-        if (compare == 0) {
-            if (!value.equals(node.value)) {
-                node.left = put(node.left, nextKey, value, nextLevel);
-            }
-        }
-        return node;
+    // constuct an empty set of points
+    public KdTree() {
+        size = 0;
     }
 
     // is the set empty?
@@ -63,7 +48,7 @@ public class KdTree {
         if (p == null) {
             throw new IllegalArgumentException();
         }
-        root = put(root, p.x(), p, 0);
+        root = insert(root, p, XMIN, YMIN, XMAX, YMAX, 0);
     }
 
     // does the set contain point p?
@@ -71,145 +56,151 @@ public class KdTree {
         if (p == null) {
             throw new IllegalArgumentException();
         }
-        return isIn(root, p.x(), p, 0);
+        return (isIn(root, p, 0) != null);
     }
+    
+    private Point2D isIn(Node node, Point2D p, int level) {
+        while (node != null) {
 
-    private boolean isIn(Node node, double key, Point2D value, int level) {
-        if (node == null) {
-            return false;
-        }
-        boolean isX = level % 2 == 0;
-        double nextKey = isX ? value.y() : value.x();
+            int compare = compare(p, node.p, level);
 
-        int compare = Double.compare(key, node.key);
-        int nextLevel = level + 1;
-        boolean contained = false;
-        if (compare < 0) {
-            contained = isIn(node.left, nextKey, value, nextLevel);
-        }
-        if (compare > 0) {
-            contained = isIn(node.right, nextKey, value, nextLevel);
-        }
-        if (compare == 0) {
-            if (value.equals(node.value)) {
-                return true;
+            if (compare < 0) {
+                return isIn(node.left, p, level + 1);
+            } else if (compare > 0) {
+                return isIn(node.right, p, level + 1);
             } else {
-                contained = isIn(node.left, nextKey, value, nextLevel);
+                return node.p;
             }
         }
-        return contained;
+
+        return null;
+    }
+
+    private int compare(Point2D a, Point2D b, int level) {
+        if (level % 2 == 0) {
+            // Compare x-coordinates
+            int result = Double.compare(a.x(), b.x());
+
+            if (result == 0) {
+                return Double.compare(a.y(), b.y());
+            } else {
+                return result;
+            }
+        } else {
+            // Compare y-coordinates
+            int result = Double.compare(a.y(), b.y());
+
+            if (result == 0) {
+                return Double.compare(a.x(), b.x());
+            } else {
+                return result;
+            }
+        }
+    }
+
+    private Node insert(Node node, Point2D p, double xmin, double ymin, double xmax, double ymax, int level) {
+        if (node == null) {
+            size++;
+            return new Node(p, new RectHV(xmin, ymin, xmax, ymax));
+        };
+
+        int compare = compare(p, node.p, level);
+
+        if (compare < 0) {
+            if (level % 2 == 0) {
+                node.left = insert(node.left, p, xmin, ymin, node.p.x(), ymax, level + 1);
+            } else {
+                node.left = insert(node.left, p, xmin, ymin, xmax, node.p.y(), level + 1);
+            }
+        } else if (compare > 0) {
+            if (level % 2 == 0) {
+                node.right = insert(node.right, p, node.p.x(), ymin, xmax, ymax, level + 1);
+            } else {
+                node.right = insert(node.right, p, xmin, node.p.y(), xmax, ymax, level + 1);
+            }
+        }
+
+        return node;
     }
 
     // draw all points to standard draw
     public void draw() {
-        traverseDraw(root);
+        StdDraw.clear();
+        drawLine(root, 0);
     }
 
-    private void traverseDraw(Node node) {
-        if (node == null) {
-            return;
+    private void drawLine(Node x, int level) {
+        if (x != null) {
+            drawLine(x.left, level + 1);
+
+            StdDraw.setPenRadius();
+            if (level % 2 == 0) {
+                StdDraw.setPenColor(StdDraw.RED);
+                StdDraw.line(x.p.x(), x.rect.ymin(), x.p.x(), x.rect.ymax());
+            } else {
+                StdDraw.setPenColor(StdDraw.BLUE);
+                StdDraw.line(x.rect.xmin(), x.p.y(), x.rect.xmax(), x.p.y());
+            }
+
+            StdDraw.setPenColor(StdDraw.BLACK);
+            StdDraw.setPenRadius(.01);
+            x.p.draw();
+
+            drawLine(x.right, level + 1);
         }
-        StdDraw.setPenRadius(0.005);
-        StdDraw.setPenColor(StdDraw.BLUE);
-        StdDraw.point(node.value.x(), node.value.y());
-        traverseDraw(node.left);
-        traverseDraw(node.right);
     }
 
     // all points that are inside the rectangle (or on the boundary)
     public Iterable<Point2D> range(RectHV rect) {
-        if (rect == null) {
-            throw new IllegalArgumentException();
-        }
-        if (root == null) {
-            return null;
-        }
         LinkedList<Point2D> list = new LinkedList<Point2D>();
-        range(root, rect, 0, list);
+        rangeAdd(root, rect, list);
         return list;
     }
 
-    private void range(Node node, RectHV rect, int level, LinkedList<Point2D> list) {
-        if (node == null) {
-            return;
-        }
-        int nextLevel = level + 1;
-        boolean isX = level % 2 == 0;
-        double min = isX ? rect.xmin() : rect.ymin();
-        double max = isX ? rect.xmax() : rect.ymax();
-        
-        // does the rectangle contain the point?
-        if (rect.contains(node.value)) {
-            list.add(node.value);
-            range(node.left, rect, nextLevel, list);
-            range(node.right, rect, nextLevel, list);
-        } else {
-            // intersects?
-            if (node.key > min && node.key < max) {
-                range(node.left, rect, nextLevel, list);
-                range(node.right, rect, nextLevel, list);
+    private void rangeAdd(Node x, RectHV rect, LinkedList<Point2D> list) {
+        if (x != null && rect.intersects(x.rect)) {
+            if (rect.contains(x.p)) {
+                list.add(x.p);
             }
-            // lower or left?
-            if (node.key > min && node.key >= max) {
-                range(node.left, rect, nextLevel, list);
-            }
-            // higher or right?
-            if (node.key <= min && node.key < max) {
-                range(node.right, rect, nextLevel, list);
-            }
+
+            rangeAdd(x.left, rect, list);
+            rangeAdd(x.right, rect, list);
         }
     }
 
-    // a nearest neightbor in the set to point p
+    // a nearest neighbour in the set to point p
     public Point2D nearest(Point2D p) {
-        if (p == null) {
-            throw new IllegalArgumentException();
-        }
-        if (root == null) {
+        if (isEmpty()) {
             return null;
-        }
-        return nearest(root, p, 0, new Champion(root.value, Double.POSITIVE_INFINITY)).point;
-    }
-
-    private class Champion {
-        private Point2D point;
-        private double dist;
-        public Champion(Point2D point, double dist) {
-            this.point = point;
-            this.dist = dist;
-        }
-    }
-
-    private Champion nearest(Node node, Point2D p, int level, Champion champion) {
-        if (node == null) return champion;
-        int l = level + 1;
-        boolean isX = level % 2 == 0;
-        double key = isX ? p.x() : p.y();
-        // check how close is the current point
-        double currDist = p.distanceSquaredTo(node.value);
-        Champion nextChampion = champion;
-        if (currDist < nextChampion.dist) {
-            nextChampion = new Champion(node.value, currDist);
-        }
-        boolean goLeft = (key <= node.key);
-        if (goLeft) {
-            nextChampion = nearest(node.left, p, l, nextChampion);
-            double estDist = node.key - key;
-            if (nextChampion.dist > estDist) {
-                nextChampion = nearest(node.right, p, l, nextChampion);
-            }
         } else {
-            nextChampion = nearest(node.right, p, l, nextChampion);
-            double estDist = node.key - key;
-            if (nextChampion.dist > estDist) {
-                nextChampion = nearest(node.left, p, l, nextChampion);
-            }
+            Point2D result = nearest(root, p, root.p);
+            return result;
         }
-        return nextChampion;
     }
 
-    // quick test
-    public static void main(String[] args) {
+    private Point2D nearest(Node node, Point2D p, Point2D min) {
+        if (node != null) {
+            if (min == null) {
+                min = node.p;
+            }
 
+            // If the current min point is closer to query than the current point
+            if (min.distanceSquaredTo(p)
+                    >= node.rect.distanceSquaredTo(p)) {
+                if (node.p.distanceSquaredTo(p) < min.distanceSquaredTo(p)) {
+                    min = node.p;
+                }
+
+                // Check in which order should we iterate
+                if (node.right != null && node.right.rect.contains(p)) {
+                    min = nearest(node.right, p, min);
+                    min = nearest(node.left, p, min);
+                } else {
+                    min = nearest(node.left, p, min);
+                    min = nearest(node.right, p, min);
+                }
+            }
+        }
+        return min;
     }
 }
