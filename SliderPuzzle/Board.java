@@ -32,8 +32,8 @@ public class Board {
             for (int j = 0; j < n; j++) {
                 str.append(board[i][j] + " ");
             }
+            str.append("\n");
         }
-        str.append("\n");
         return str.toString();
     }
 
