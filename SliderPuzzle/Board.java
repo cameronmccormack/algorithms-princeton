@@ -27,6 +27,7 @@ public class Board {
     public String toString() {
         StringBuilder str = new StringBuilder();
         str.append(n + "\n");
+
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 str.append(board[i][j] + " ");

@@ -25,6 +25,7 @@ public class Solver {
         SolverStep step, stepTwin;
         while (!steps.min().getBoard().isGoal() && !stepsTwin.min().getBoard().isGoal()) {
             step = steps.delMin();
+
             for (Board neighbor : step.getBoard().neighbors()) {
                 if (!inPath(step, neighbor)) {
                     steps.insert(new SolverStep(neighbor, step.getMoves() + 1, step));
