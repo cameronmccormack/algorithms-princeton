@@ -168,9 +168,4 @@ public class Board {
         }
         throw new RuntimeException();
     }
-
-    // quick test
-    public static void main(String[] args) {
-    
-    }
 }

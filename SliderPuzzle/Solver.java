@@ -95,10 +95,11 @@ public class Solver {
 
     private boolean inPath(SolverStep step, Board board) {
         SolverStep previousStep = step;
-        while ((previousStep = previousStep.getPreviousStep()) != null) {
+        while (previousStep != null) {
             if (previousStep.getBoard().equals(board)) {
                 return true;
             }
+            previousStep = previousStep.getPreviousStep();
         }
         return false;
     }
@@ -159,7 +160,7 @@ public class Solver {
         if (!solver.isSolvable()) {
             StdOut.println("No solution possible.");
         } else {
-            StdOut.print("Minimum number of moves = " + solver.moves());
+            StdOut.print("Minimum number of moves = " + solver.moves() + "\n\n");
             for (Board board : solver.solution()) {
                 StdOut.println(board);
             }
