@@ -15,7 +15,6 @@ public class KdTree {
     private class Node {
         private Point2D p;
         private RectHV rect;
-
         private Node left;
         private Node right;
 
@@ -61,9 +60,7 @@ public class KdTree {
     
     private Point2D isIn(Node node, Point2D p, int level) {
         while (node != null) {
-
             int compare = compare(p, node.p, level);
-
             if (compare < 0) {
                 return isIn(node.left, p, level + 1);
             } else if (compare > 0) {
@@ -102,10 +99,8 @@ public class KdTree {
         if (node == null) {
             size++;
             return new Node(p, new RectHV(xmin, ymin, xmax, ymax));
-        };
-
+        }
         int compare = compare(p, node.p, level);
-
         if (compare < 0) {
             if (level % 2 == 0) {
                 node.left = insert(node.left, p, xmin, ymin, node.p.x(), ymax, level + 1);
@@ -119,7 +114,6 @@ public class KdTree {
                 node.right = insert(node.right, p, xmin, node.p.y(), xmax, ymax, level + 1);
             }
         }
-
         return node;
     }
 
@@ -129,24 +123,21 @@ public class KdTree {
         drawLine(root, 0);
     }
 
-    private void drawLine(Node x, int level) {
-        if (x != null) {
-            drawLine(x.left, level + 1);
-
+    private void drawLine(Node node, int level) {
+        if (node != null) {
+            drawLine(node.left, level + 1);
             StdDraw.setPenRadius();
             if (level % 2 == 0) {
                 StdDraw.setPenColor(StdDraw.RED);
-                StdDraw.line(x.p.x(), x.rect.ymin(), x.p.x(), x.rect.ymax());
+                StdDraw.line(node.p.x(), node.rect.ymin(), node.p.x(), node.rect.ymax());
             } else {
                 StdDraw.setPenColor(StdDraw.BLUE);
-                StdDraw.line(x.rect.xmin(), x.p.y(), x.rect.xmax(), x.p.y());
+                StdDraw.line(node.rect.xmin(), node.p.y(), node.rect.xmax(), node.p.y());
             }
-
             StdDraw.setPenColor(StdDraw.BLACK);
             StdDraw.setPenRadius(.01);
-            x.p.draw();
-
-            drawLine(x.right, level + 1);
+            node.p.draw();
+            drawLine(node.right, level + 1);
         }
     }
 
@@ -162,7 +153,6 @@ public class KdTree {
             if (rect.contains(x.p)) {
                 list.add(x.p);
             }
-
             rangeAdd(x.left, rect, list);
             rangeAdd(x.right, rect, list);
         }
@@ -183,14 +173,12 @@ public class KdTree {
             if (min == null) {
                 min = node.p;
             }
-
             // If the current min point is closer to query than the current point
             if (min.distanceSquaredTo(p)
                     >= node.rect.distanceSquaredTo(p)) {
                 if (node.p.distanceSquaredTo(p) < min.distanceSquaredTo(p)) {
                     min = node.p;
                 }
-
                 // Check in which order should we iterate
                 if (node.right != null && node.right.rect.contains(p)) {
                     min = nearest(node.right, p, min);
