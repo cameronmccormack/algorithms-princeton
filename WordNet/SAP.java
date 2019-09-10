@@ -19,7 +19,7 @@ public class SAP {
 
     // length of shortest ancestral path between v and w; -1 if no such path
     public int length(int v, int w) {
-        if (v < 0 || w < 0 || v > digraph.V() || w > digraph.V()) {
+        if (v < 0 || w < 0 || v > digraph.V() - 1 || w > digraph.V() - 1) {
             throw new java.lang.IllegalArgumentException();
         }
         return calcSAP(v, w, "path");
@@ -27,7 +27,7 @@ public class SAP {
 
     // a common ancestor of v and w that participates in a shortest ancestral path; -1 if no such path
     public int ancestor(int v, int w) {
-        if (v < 0 || w < 0 || v > digraph.V() || w > digraph.V()) {
+        if (v < 0 || w < 0 || v > digraph.V() - 1 || w > digraph.V() - 1) {
             throw new java.lang.IllegalArgumentException();
         }
         return calcSAP(v, w, "ancestor");
@@ -79,13 +79,13 @@ public class SAP {
         if (v == null || w == null) {
             throw new java.lang.IllegalArgumentException();
         }
-        for (int vertex: v) {
-            if (vertex < 0 || vertex > digraph.V()) {
+        for (Integer vertex: v) {
+            if (vertex == null || vertex < 0 || vertex > digraph.V()) {
                 throw new java.lang.IllegalArgumentException();
             }
         }
-        for (int vertex: w) {
-            if (vertex < 0 || vertex > digraph.V()) {
+        for (Integer vertex: w) {
+            if (vertex == null || vertex < 0 || vertex > digraph.V()) {
                 throw new java.lang.IllegalArgumentException();
             }
         }
@@ -97,13 +97,13 @@ public class SAP {
         if (v == null || w == null) {
             throw new java.lang.IllegalArgumentException();
         }
-        for (int vertex: v) {
-            if (vertex < 0 || vertex > digraph.V()) {
+        for (Integer vertex: v) {
+            if (vertex == null || vertex < 0 || vertex > digraph.V()) {
                 throw new java.lang.IllegalArgumentException ();
             }
         }
-        for (int vertex: w) {
-            if (vertex < 0 || vertex > digraph.V()) {
+        for (Integer vertex: w) {
+            if (vertex == null || vertex < 0 || vertex > digraph.V()) {
                 throw new java.lang.IllegalArgumentException ();
             }
         }
