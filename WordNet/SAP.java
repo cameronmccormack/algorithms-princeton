@@ -80,12 +80,12 @@ public class SAP {
             throw new IllegalArgumentException();
         }
         for (Integer vertex: v) {
-            if (vertex == null || vertex < 0 || vertex > digraph.V()) {
+            if (vertex == null || vertex < 0 || vertex > digraph.V() - 1) {
                 throw new IllegalArgumentException();
             }
         }
         for (Integer vertex: w) {
-            if (vertex == null || vertex < 0 || vertex > digraph.V()) {
+            if (vertex == null || vertex < 0 || vertex > digraph.V() - 1) {
                 throw new IllegalArgumentException();
             }
         }
@@ -98,12 +98,12 @@ public class SAP {
             throw new IllegalArgumentException();
         }
         for (Integer vertex: v) {
-            if (vertex == null || vertex < 0 || vertex > digraph.V()) {
+            if (vertex == null || vertex < 0 || vertex > digraph.V() - 1) {
                 throw new IllegalArgumentException();
             }
         }
         for (Integer vertex: w) {
-            if (vertex == null || vertex < 0 || vertex > digraph.V()) {
+            if (vertex == null || vertex < 0 || vertex > digraph.V() - 1) {
                 throw new IllegalArgumentException();
             }
         }
