@@ -75,10 +75,11 @@ public class WordNet {
         }
         Bag<Integer> idA = wordIndex.get(nounA);
         Bag<Integer> idB = wordIndex.get(nounB);
-        if (sap.ancestor(idA, idB) == -1) {
+        int synset = sap.ancestor(idA, idB);
+        if (synset == -1) {
             return "None";
         } else {
-            return idIndex.get(sap.ancestor(idA, idB));
+            return idIndex.get(synset);
         }
     }
 
