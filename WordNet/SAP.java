@@ -66,7 +66,7 @@ public class SAP {
             }
         }
 
-        if (mode == "path") {
+        if (mode.equals("path")) {
             if (minLen < Integer.MAX_VALUE) return minLen;
             else return -1;
         } else {
@@ -145,7 +145,7 @@ public class SAP {
             }
         }
 
-        if (mode == "path") {
+        if (mode.equals("path")) {
             if (minLen < Integer.MAX_VALUE) return minLen;
             else return -1;
         } else {

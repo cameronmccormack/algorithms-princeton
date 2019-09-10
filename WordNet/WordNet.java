@@ -52,8 +52,8 @@ public class WordNet {
 
         // exactly one vertex should have zero outdegree as root
         int root = 0;
-        for (int i = 0; i < wordIndex.size(); i++) {
-            if (digraph.outdegree(i) == 0) {
+        for (int i = 0; i < digraph.V(); i++) {
+            if (!digraph.adj(i).iterator().hasNext()) {
                 root++;
             }
         }
