@@ -12,7 +12,7 @@ public class SAP {
     // constructor takes a digraph (not necessarily a DAG)
     public SAP(Digraph G) {
         if (G == null) {
-            throw new java.lang.IllegalArgumentException();
+            throw new IllegalArgumentException();
         }
         digraph = new Digraph(G);
     }
@@ -20,7 +20,7 @@ public class SAP {
     // length of shortest ancestral path between v and w; -1 if no such path
     public int length(int v, int w) {
         if (v < 0 || w < 0 || v > digraph.V() - 1 || w > digraph.V() - 1) {
-            throw new java.lang.IllegalArgumentException();
+            throw new IllegalArgumentException();
         }
         return calcSAP(v, w, "path");
     }
@@ -28,14 +28,14 @@ public class SAP {
     // a common ancestor of v and w that participates in a shortest ancestral path; -1 if no such path
     public int ancestor(int v, int w) {
         if (v < 0 || w < 0 || v > digraph.V() - 1 || w > digraph.V() - 1) {
-            throw new java.lang.IllegalArgumentException();
+            throw new IllegalArgumentException();
         }
         return calcSAP(v, w, "ancestor");
     }
 
     private int calcSAP(int v, int w, String mode) {
-        if (mode != "path" && mode != "ancestor") {
-            throw new java.lang.IllegalArgumentException();
+        if (!mode.equals("path") && !mode.equals("ancestor")) {
+            throw new IllegalArgumentException();
         }
         BreadthFirstDirectedPaths bfs = new BreadthFirstDirectedPaths(digraph, w);
         int minLen = Integer.MAX_VALUE;
@@ -43,11 +43,11 @@ public class SAP {
         Boolean[] marked = new Boolean[digraph.V()];
         int[] distTo = new int[digraph.V()];
         for (int i = 0; i < digraph.V(); i++) {
-            marked[i] = false;
+            marked[i] = Boolean.FALSE;
             distTo[i] = Integer.MAX_VALUE;
         }
         Queue<Integer> q = new Queue<Integer>();
-        marked[v] = true;
+        marked[v] = Boolean.TRUE;
         distTo[v] = 0;
         q.enqueue(v);
         while (!q.isEmpty()) {
@@ -60,7 +60,7 @@ public class SAP {
             for (int nextVertex: digraph.adj(currentVertex)) {
                 if (!marked[nextVertex]) {
                     distTo[nextVertex] = distTo[currentVertex] + 1;
-                    marked[nextVertex] = true;
+                    marked[nextVertex] = Boolean.TRUE;
                     q.enqueue(nextVertex);
                 }
             }
@@ -77,16 +77,16 @@ public class SAP {
     // length of shortest ancestral path between any vertex in v and any vertex in w; -1 if no such path
     public int length(Iterable<Integer> v, Iterable<Integer> w) {
         if (v == null || w == null) {
-            throw new java.lang.IllegalArgumentException();
+            throw new IllegalArgumentException();
         }
         for (Integer vertex: v) {
             if (vertex == null || vertex < 0 || vertex > digraph.V()) {
-                throw new java.lang.IllegalArgumentException();
+                throw new IllegalArgumentException();
             }
         }
         for (Integer vertex: w) {
             if (vertex == null || vertex < 0 || vertex > digraph.V()) {
-                throw new java.lang.IllegalArgumentException();
+                throw new IllegalArgumentException();
             }
         }
         return calcMultiSAP(v, w, "path");
@@ -95,24 +95,24 @@ public class SAP {
     // a common ancestor that participates in shortest ancestral path; -1 if no such path
     public int ancestor(Iterable<Integer> v, Iterable<Integer> w) {
         if (v == null || w == null) {
-            throw new java.lang.IllegalArgumentException();
+            throw new IllegalArgumentException();
         }
         for (Integer vertex: v) {
             if (vertex == null || vertex < 0 || vertex > digraph.V()) {
-                throw new java.lang.IllegalArgumentException ();
+                throw new IllegalArgumentException();
             }
         }
         for (Integer vertex: w) {
             if (vertex == null || vertex < 0 || vertex > digraph.V()) {
-                throw new java.lang.IllegalArgumentException ();
+                throw new IllegalArgumentException();
             }
         }
         return calcMultiSAP(v, w, "ancestor");
     }
 
     private int calcMultiSAP(Iterable<Integer> v, Iterable<Integer> w, String mode) {
-        if (mode != "path" && mode != "ancestor") {
-            throw new java.lang.IllegalArgumentException();
+        if (!mode.equals("path") && !mode.equals("ancestor")) {
+            throw new IllegalArgumentException();
         }
         BreadthFirstDirectedPaths bfs = new BreadthFirstDirectedPaths(digraph, w);
         int minLen = Integer.MAX_VALUE;
@@ -120,12 +120,12 @@ public class SAP {
         Boolean[] marked = new Boolean[digraph.V()];
         int[] distTo = new int[digraph.V()];
         for (int i = 0; i < digraph.V(); i++) {
-            marked[i] = false;
+            marked[i] = Boolean.FALSE;
             distTo[i] = Integer.MAX_VALUE;
         }
         Queue<Integer> q = new Queue<Integer>();
         for (int vertex: v) {
-            marked[vertex] = true;
+            marked[vertex] = Boolean.TRUE;
             distTo[vertex] = 0;
             q.enqueue(vertex);
         }
@@ -139,7 +139,7 @@ public class SAP {
             for (int next: digraph.adj(currentVertex)) {
                 if (!marked[next]) {
                     distTo[next] = distTo[currentVertex] + 1;
-                    marked[next] = true;
+                    marked[next] = Boolean.TRUE;
                     q.enqueue(next);
                 }
             }

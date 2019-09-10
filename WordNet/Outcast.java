@@ -12,7 +12,7 @@ public class Outcast {
     // given an array of WordNet nouns, return an outcast
     public String outcast(String[] nouns) {
         if (nouns.length == 0) {
-            throw new java.lang.IllegalArgumentException();
+            throw new IllegalArgumentException();
         }
         int maxDistance = 0;
         String maxNoun = nouns[0];
@@ -21,7 +21,7 @@ public class Outcast {
             for (String compareNoun : nouns) {
                 sumDistance += net.distance(testNoun, compareNoun);
             }
-            if (sumDistance > maxDistance){
+            if (sumDistance > maxDistance) {
                 maxDistance = sumDistance;
                 maxNoun = testNoun;
             }
