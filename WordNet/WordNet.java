@@ -2,6 +2,7 @@ import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.Digraph;
 import edu.princeton.cs.algs4.ST;
 import edu.princeton.cs.algs4.Bag;
+import edu.princeton.cs.algs4.DirectedCycle;
 
 public class WordNet {
     private Digraph digraph;
@@ -42,6 +43,22 @@ public class WordNet {
             for (int i = 1; i < splitHypernyms.length; i++) {
                 digraph.addEdge(source, Integer.parseInt(splitHypernyms[i]));
             }
+        }
+
+        // check no cycles
+        if ((new DirectedCycle(digraph).hasCycle())) {
+            throw new IllegalArgumentException();
+        }
+
+        // exactly one vertex should have zero outdegree as root
+        int root = 0;
+        for (int i = 0; i < v; i++) {
+            if (digraph.outdegree(i) == 0) {
+                root++;
+            }
+        }
+        if (root != 1) {
+            throw new IllegalArgumentException();
         }
 
         sap = new SAP(digraph);
