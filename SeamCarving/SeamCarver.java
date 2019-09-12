@@ -276,10 +276,4 @@ public class SeamCarver {
         pic = newPic;
         energyMatrix();
     }
-
-    // quick test
-    public static void main(String[] args) {
-
-    }
-
 }
