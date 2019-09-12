@@ -1,4 +1,3 @@
-import java.lang.Math;
 import edu.princeton.cs.algs4.Picture;
 
 public class SeamCarver {
@@ -41,27 +40,151 @@ public class SeamCarver {
             return EDGE_ENERGY;
         }
         
-        xGradRed = pic.get(x-1, y).getRed() - pic.get(x+1, y).getRed();
-        xGradBlue = pic.get(x-1, y).getBlue() - pic.get(x+1, y).getBlue();
-        xGradGreen = pic.get(x-1, y).getGreen() - pic.get(x+1, y).getGreen();
-        xGradSquared = xGradRed * xGradRed + xGradBlue * xGradBlue + xGradGreen * xGradGreen;
+        double xGradRed = pic.get(x-1, y).getRed() - pic.get(x+1, y).getRed();
+        double xGradBlue = pic.get(x-1, y).getBlue() - pic.get(x+1, y).getBlue();
+        double xGradGreen = pic.get(x-1, y).getGreen() - pic.get(x+1, y).getGreen();
+        double xGradSquared = xGradRed * xGradRed + xGradBlue * xGradBlue + xGradGreen * xGradGreen;
 
-        yGradRed = pic.get(x, y-1).getRed() - pic.get(x, y+1).getRed();
-        yGradBlue = pic.get(x, y-1).getBlue() - pic.get(x, y+1).getBlue();
-        yGradGreen = pic.get(x, y-1).getGreen() - pic.get(x, y+1).getGreen();
-        yGradSquared = yGradRed * yGradRed + yGradBlue * yGradBlue + yGradGreen * yGradGreen;
+        double yGradRed = pic.get(x, y-1).getRed() - pic.get(x, y+1).getRed();
+        double yGradBlue = pic.get(x, y-1).getBlue() - pic.get(x, y+1).getBlue();
+        double yGradGreen = pic.get(x, y-1).getGreen() - pic.get(x, y+1).getGreen();
+        double yGradSquared = yGradRed * yGradRed + yGradBlue * yGradBlue + yGradGreen * yGradGreen;
 
         return Math.sqrt(xGradSquared + yGradSquared);
     }
 
     // sequence of indices for horizontal seam
     public int[] findHorizontalSeam() {
+        int[] seam = new int[pic.width()];
+        double[][] distTo = new double[pic.width()][pic.height()];
+        int edgeTo[][] = new int[pic.width()][pic.height()];
 
+        // initialise distTo all as infinity
+        for (int x = 0; x < pic.width(); x++) {
+            for (int y = 0; y < pic.height(); y++) {
+                distTo[x][y] = Double.POSITIVE_INFINITY;
+            }
+        }
+
+        // virtual source, reference -1
+        for (int y = 0; y < pic.height(); y++) {
+            edgeTo[y][0] = -1;
+            distTo[y][0] = energy[y][0];
+        }
+
+        // relax vertices in topological order
+        for (int x = 0; x < pic.width(); x++) {
+            for (int y = 0; y < pic.height(); y++) {
+                
+                // relax directly right
+                if (x < pic.width() - 1) {
+                    if (distTo[x+1][y] > distTo[x][y] + energy[x+1][y]) {
+                        distTo[x+1][y] = distTo[x][y] + energy[x+1][y];
+                        edgeTo[x+1][y] = y;
+                    }
+                }
+
+                // relax right and up
+                if (x < pic.width() - 1 && y > 0) {
+                    if (distTo[x+1][y-1] > distTo[x][y] + energy[x+1][y-1]) {
+                        distTo[x+1][y-1] = distTo[x][y] + energy[x+1][y-1];
+                        edgeTo[x+1][y-1] = y;
+                    }
+                }
+
+                // relax down and right
+                if (x < pic.width() - 1 && y < pic.height() - 1) {
+                    if (distTo[x+1][y+1] > distTo[x][y] + energy[x+1][y+1]) {
+                        distTo[x+1][y+1] = distTo[x][y] + energy[x+1][y+1];
+                        edgeTo[x+1][y+1] = y;
+                    }
+                }
+            }
+        }
+
+        // relax cost to virtual sink
+        double costToSink = Double.POSITIVE_INFINITY;
+        int edgeToSink = -1;
+        for (int y = 0; y < pic.height(); y++) {
+            if (costToSink > distTo[pic.width()-1][y]) {
+                costToSink = distTo[pic.width()-1][y];
+                edgeToSink = y;
+            }
+        }
+
+        // create seam
+        seam[pic.width()-1] = edgeToSink;
+        for (int x = pic.width()-2; x >= 0; x--) {
+            seam[x] = edgeTo[seam[x+1]][x+1];
+        }
+        return seam;
     }
 
     // sequence of indices for vertical seam
     public int[] findVerticalSeam() {
+        int[] seam = new int[pic.height()];
+        double[][] distTo = new double[pic.width()][pic.height()];
+        int edgeTo[][] = new int[pic.width()][pic.height()];
 
+        // initialise distTo all as infinity
+        for (int x = 0; x < pic.width(); x++) {
+            for (int y = 0; y < pic.height(); y++) {
+                distTo[x][y] = Double.POSITIVE_INFINITY;
+            }
+        }
+
+        // virtual source, reference -1
+        for (int x = 0; x < pic.width(); x++) {
+            edgeTo[x][0] = -1;
+            distTo[x][0] = energy[x][0];
+        }
+
+        // relax vertices in topological order
+        for (int y = 0; y < pic.height(); y++) {
+            for (int x = 0; x < pic.width(); x++) {
+                
+                // relax directly below
+                if (y < pic.height() - 1) {
+                    if (distTo[x][y+1] > distTo[x][y] + energy[x][y+1]) {
+                        distTo[x][y+1] = distTo[x][y] + energy[x][y+1];
+                        edgeTo[x][y+1] = x;
+                    }
+                }
+
+                // relax down and left
+                if (y < pic.height() - 1 && x > 0) {
+                    if (distTo[x-1][y+1] > distTo[x][y] + energy[x-1][y+1]) {
+                        distTo[x-1][y+1] = distTo[x][y] + energy[x-1][y+1];
+                        edgeTo[x-1][y+1] = x;
+                    }
+                }
+
+                // relax down and right
+                if (y < pic.height() - 1 && x < pic.width() - 1) {
+                    if (distTo[x+1][y+1] > distTo[x][y] + energy[x+1][y+1]) {
+                        distTo[x+1][y+1] = distTo[x][y] + energy[x+1][y+1];
+                        edgeTo[x+1][y+1] = x;
+                    }
+                }
+            }
+        }
+
+        // relax cost to virtual sink
+        double costToSink = Double.POSITIVE_INFINITY;
+        int edgeToSink = -1;
+        for (int x = 0; x < pic.width(); x++) {
+            if (costToSink > distTo[x][pic.height()-1]) {
+                costToSink = distTo[x][pic.height()-1];
+                edgeToSink = x;
+            }
+        }
+
+        // create seam
+        seam[pic.height()-1] = edgeToSink;
+        for (int y = pic.height()-2; y >= 0; y--) {
+            seam[y] = edgeTo[seam[y+1]][y+1];
+        }
+        return seam; 
     }
 
     // remove horizontal seam from current picture
@@ -74,7 +197,7 @@ public class SeamCarver {
         if (seam.length != pic.width()) {
             throw new IllegalArgumentException();
         }
-        for (int i = 0; i < seam.length() - 1; i++) {
+        for (int i = 0; i < seam.length - 1; i++) {
             if (Math.abs(seam[i] - seam[i+1]) > 1) {
                 throw new IllegalArgumentException();
             }
@@ -104,7 +227,7 @@ public class SeamCarver {
         if (seam.length != pic.height()) {
             throw new IllegalArgumentException();
         }
-        for (int i = 0; i < seam.length() - 1; i++) {
+        for (int i = 0; i < seam.length - 1; i++) {
             if (Math.abs(seam[i] - seam[i+1]) > 1) {
                 throw new IllegalArgumentException();
             }
