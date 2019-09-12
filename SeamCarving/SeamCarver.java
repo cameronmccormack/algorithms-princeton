@@ -214,7 +214,7 @@ public class SeamCarver {
         Picture newPic = new Picture(pic.width(), pic.height()-1);
         int displacement = 0;
         for (int x = 0; x < pic.width(); x++) {
-            for (int y = 0; y < pic.width(); y++) {
+            for (int y = 0; y < pic.height(); y++) {
                 if (y == seam[x]) {
                     displacement = -1;
                 } else {
