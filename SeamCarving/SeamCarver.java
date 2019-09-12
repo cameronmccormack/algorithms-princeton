@@ -1,3 +1,5 @@
+import edu.princeton.cs.algs4.Picture;
+
 public class SeamCarver {
 
     // create a seam carver object based on the given picture
