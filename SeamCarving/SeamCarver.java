@@ -1,4 +1,5 @@
 import edu.princeton.cs.algs4.Picture;
+import java.awt.Color;
 
 public class SeamCarver {
     private Picture pic;
@@ -19,7 +20,6 @@ public class SeamCarver {
         energy = new double[pic.width()][pic.height()];
         for (int x = 0; x < pic.width(); x++) {    
             for (int y = 0; y < pic.height(); y++) {
-                // add one to references due to definition of energy API
                 energy[x][y] = energy(x, y);
             }
         }
@@ -51,17 +51,21 @@ public class SeamCarver {
         if (x == 0 || x == pic.width() - 1 || y == 0 || y == pic.height() - 1) {
             return EDGE_ENERGY;
         }
-       
+
         // find colour gradients in x direction
-        double xGradRed = pic.get(x-1, y).getRed() - pic.get(x+1, y).getRed();
-        double xGradBlue = pic.get(x-1, y).getBlue() - pic.get(x+1, y).getBlue();
-        double xGradGreen = pic.get(x-1, y).getGreen() - pic.get(x+1, y).getGreen();
+        Color leftCol = pic.get(x-1, y);
+        Color rightCol = pic.get(x+1, y);
+        double xGradRed = leftCol.getRed() - rightCol.getRed();
+        double xGradBlue = leftCol.getBlue() - rightCol.getBlue();
+        double xGradGreen = leftCol.getGreen() - rightCol.getGreen();
         double xGradSquared = xGradRed * xGradRed + xGradBlue * xGradBlue + xGradGreen * xGradGreen;
 
         // find colour gradients in y direction
-        double yGradRed = pic.get(x, y-1).getRed() - pic.get(x, y+1).getRed();
-        double yGradBlue = pic.get(x, y-1).getBlue() - pic.get(x, y+1).getBlue();
-        double yGradGreen = pic.get(x, y-1).getGreen() - pic.get(x, y+1).getGreen();
+        Color upCol = pic.get(x, y-1);
+        Color downCol = pic.get(x, y+1);
+        double yGradRed = upCol.getRed() - downCol.getRed();
+        double yGradBlue = upCol.getBlue() - downCol.getBlue();
+        double yGradGreen = upCol.getGreen() - downCol.getGreen();
         double yGradSquared = yGradRed * yGradRed + yGradBlue * yGradBlue + yGradGreen * yGradGreen;
 
         return Math.sqrt(xGradSquared + yGradSquared);
