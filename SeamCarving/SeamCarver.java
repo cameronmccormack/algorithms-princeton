@@ -7,6 +7,9 @@ public class SeamCarver {
 
     // create a seam carver object based on the given picture
     public SeamCarver(Picture picture) {
+        if (picture == null) {
+            throw new IllegalArgumentException();
+        }
         pic = picture;
         energyMatrix();
     }
@@ -24,7 +27,9 @@ public class SeamCarver {
 
     // current picture
     public Picture picture() {
-        return pic;
+        Picture temp = pic;
+        pic = new Picture(pic);
+        return temp;
     }
 
     // width of current picture
@@ -198,6 +203,9 @@ public class SeamCarver {
 
     // remove horizontal seam from current picture
     public void removeHorizontalSeam(int[] seam) {
+        if (seam == null) {
+            throw new IllegalArgumentException();
+        }
         for (int point : seam) {
             if (point < 0 || point > pic.height() - 1) {
                 throw new IllegalArgumentException();
@@ -229,6 +237,9 @@ public class SeamCarver {
 
     // remove vertical seam from current picture
     public void removeVerticalSeam(int[] seam) {
+        if (seam == null) {
+            throw new IllegalArgumentException();
+        }
         for (int point : seam) {
             if (point < 0 || point > pic.width() - 1) {
                 throw new IllegalArgumentException();
