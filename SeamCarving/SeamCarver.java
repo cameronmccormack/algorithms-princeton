@@ -8,9 +8,15 @@ public class SeamCarver {
     // create a seam carver object based on the given picture
     public SeamCarver(Picture picture) {
         pic = picture;
+        energyMatrix();
+    }
+
+    // calculate the energies of each pixel
+    private void energyMatrix() {
         energy = new double[pic.width()][pic.height()];
         for (int x = 0; x < pic.width(); x++) {    
             for (int y = 0; y < pic.height(); y++) {
+                // add one to references due to definition of energy API
                 energy[x][y] = energy(x, y);
             }
         }
@@ -33,18 +39,21 @@ public class SeamCarver {
 
     // energy of pixel at column x and row y
     public double energy(int x, int y) {
-        if ( x < 0 || x > pic.width() - 1 || y < 0 || y > pic.width() - 1) {
+        // check x and y are in range (note, in this function only counting starts at 1 not 0)
+        if (x < 0 || x > pic.width() - 1 || y < 0 || y > pic.height() - 1) {
             throw new IllegalArgumentException();
         }
-        if ( x == 0 || x == pic.width() - 1 || y == 0 || y == pic.width() - 1) {
+        if (x == 0 || x == pic.width() - 1 || y == 0 || y == pic.height() - 1) {
             return EDGE_ENERGY;
         }
-        
+       
+        // find colour gradients in x direction
         double xGradRed = pic.get(x-1, y).getRed() - pic.get(x+1, y).getRed();
         double xGradBlue = pic.get(x-1, y).getBlue() - pic.get(x+1, y).getBlue();
         double xGradGreen = pic.get(x-1, y).getGreen() - pic.get(x+1, y).getGreen();
         double xGradSquared = xGradRed * xGradRed + xGradBlue * xGradBlue + xGradGreen * xGradGreen;
 
+        // find colour gradients in y direction
         double yGradRed = pic.get(x, y-1).getRed() - pic.get(x, y+1).getRed();
         double yGradBlue = pic.get(x, y-1).getBlue() - pic.get(x, y+1).getBlue();
         double yGradGreen = pic.get(x, y-1).getGreen() - pic.get(x, y+1).getGreen();
@@ -68,8 +77,8 @@ public class SeamCarver {
 
         // virtual source, reference -1
         for (int y = 0; y < pic.height(); y++) {
-            edgeTo[y][0] = -1;
-            distTo[y][0] = energy[y][0];
+            edgeTo[0][y] = -1;
+            distTo[0][y] = energy[0][y];
         }
 
         // relax vertices in topological order
@@ -115,7 +124,7 @@ public class SeamCarver {
         // create seam
         seam[pic.width()-1] = edgeToSink;
         for (int x = pic.width()-2; x >= 0; x--) {
-            seam[x] = edgeTo[seam[x+1]][x+1];
+            seam[x] = edgeTo[x+1][seam[x+1]];
         }
         return seam;
     }
@@ -214,7 +223,8 @@ public class SeamCarver {
             }
             displacement = 0;
         }
-        pic = newPic; 
+        pic = newPic;
+        energyMatrix();
     }
 
     // remove vertical seam from current picture
@@ -245,6 +255,7 @@ public class SeamCarver {
             displacement = 0;
         }
         pic = newPic;
+        energyMatrix();
     }
 
     // quick test
