@@ -8,3 +8,4 @@ This repository contains code for the exercises of Robert Sedgewick and Kevin Wa
 * Solving the 8-puzzle problem (and its generalizations) using the A\* search algorithm.
 * Implementing range search and nearest-neighbour search using Kd-trees.
 * Creating and interpreting a Word Net using directed graph algorithms.
+* Seam carving (content-aware image resizing) using a shortest-path algorithm.
