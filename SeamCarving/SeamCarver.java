@@ -27,8 +27,12 @@ public class SeamCarver {
 
     // current picture
     public Picture picture() {
-        Picture temp = pic;
-        pic = new Picture(pic);
+        Picture temp = new Picture(pic.width(), pic.height());
+        for (int x = 0; x < pic.width(); x++) {
+            for (int y = 0; y < pic.height(); y++) {
+                temp.set(x, y, pic.get(x, y));
+            }
+        }
         return temp;
     }
 
