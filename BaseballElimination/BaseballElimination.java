@@ -38,7 +38,7 @@ public class BaseballElimination {
             wins[i] = in.readInt();
             losses[i] = in.readInt();
             remaining[i] = in.readInt();
-            for (int j = 0; j < 0; j++) {
+            for (int j = 0; j < n; j++) {
                 against[i][j] = in.readInt();
             }
 
