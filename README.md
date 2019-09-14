@@ -9,3 +9,4 @@ This repository contains code for the exercises of Robert Sedgewick and Kevin Wa
 * Implementing range search and nearest-neighbour search using Kd-trees.
 * Creating and interpreting a Word Net using directed graph algorithms.
 * Seam carving (content-aware image resizing) using a shortest-path algorithm.
+* Determining which teams in a sports division are mathematically eliminated from contention using maximum flow and minimum cut algorithms.
