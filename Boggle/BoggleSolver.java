@@ -4,7 +4,7 @@ import edu.princeton.cs.algs4.TST;
 import edu.princeton.cs.algs4.Queue;
 
 public class BoggleSolver {
-    private TST<Boolean> dict;
+    private final TST<Boolean> dict;
     private int rows;
     private int cols;
     private BoggleBoard boggle;
@@ -42,7 +42,7 @@ public class BoggleSolver {
 
     private void appendWords(int x, int y, StringBuilder build, boolean[][] visited) {
         // add current letter to string and mark position as visited
-        build.append(boggle.getLetter(x, y));
+        build.append(boggle.getLetter(y, x));
         visited[x][y] = true;
 
         // if the new string is in the dictionary and >= 3 characters, add to words list
@@ -53,16 +53,16 @@ public class BoggleSolver {
 
         // if there are no words with the current string as a prefix, stop searching from this
         // path
-        if (dict.keysWithPrefix(current) == null) {
+        if (((Queue<String>) dict.keysWithPrefix(current)).isEmpty()) {
             return;
         }
 
-        // check the position to the left
+        // check the position to the right
         if (x+1 < cols && !visited[x+1][y]) {
             appendWords(x+1, y, build, visited);
         }
 
-        // check the position to the right
+        // check the position to the left
         if (x-1 >= 0 && !visited[x-1][y]) {
             appendWords(x-1, y, build, visited);
         }
@@ -77,22 +77,22 @@ public class BoggleSolver {
             appendWords(x, y-1, build, visited);
         }
 
-        // check the position left and down
+        // check the position right and down
         if (x+1 < cols && y+1 < rows && !visited[x+1][y+1]) {
             appendWords(x+1, y+1, build, visited);
         }
 
-        // check the position left and up
+        // check the position right and up
         if (x+1 < cols && y-1 >= 0 && !visited[x+1][y-1]) {
             appendWords(x+1, y-1, build, visited);
         }
         
-        // check the position right and down
+        // check the position left and down
         if (x-1 >= 0 && y+1 < rows && !visited[x-1][y+1]) {
             appendWords(x-1, y+1, build, visited);
         }
 
-        // check the position right and up
+        // check the position left and up
         if (x-1 >= 0 && y-1 >= 0 && !visited[x-1][y-1]) {
             appendWords(x-1, y-1, build, visited);
         }
@@ -117,11 +117,7 @@ public class BoggleSolver {
     }
 
     private boolean contains(String word) {
-        if (dict.get(word) == null) {
-            return false;
-        } else {
-            return true;
-        }
+        return dict.contains(word);
     }
 
     // Test client that takes the filename of a dictionary and the filename of a Boggle board as
