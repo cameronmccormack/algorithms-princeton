@@ -25,11 +25,11 @@ public class BoggleSolver {
         cols = board.cols();
         boggle = board;
         words = new Queue<String>();
-        for (int x = 0; x < rows; x++) {
-            for (int y = 0; y < cols; y++) {
-                boolean[][] visited = new boolean[rows][cols];
-                for (int i = 0; i < rows; i++) {
-                    for (int j = 0; j < cols; j++) {
+        for (int x = 0; x < cols; x++) {
+            for (int y = 0; y < rows; y++) {
+                boolean[][] visited = new boolean[cols][rows];
+                for (int i = 0; i < cols; i++) {
+                    for (int j = 0; j < rows; j++) {
                         visited[i][j] = false;
                     }
                 }
@@ -58,42 +58,42 @@ public class BoggleSolver {
         }
 
         // check the position to the left
-        if (x+1 < rows && !visited[x+1][y]) {
+        if (x+1 < cols && !visited[x+1][y]) {
             appendWords(x+1, y, build, visited);
         }
 
         // check the position to the right
-        if (!visited[x-1][y] && x-1 >= 0) {
+        if (x-1 >= 0 && !visited[x-1][y]) {
             appendWords(x-1, y, build, visited);
         }
 
         // check the position below
-        if (!visited[x][y+1] && y+1 < cols) {
+        if (y+1 < rows && !visited[x][y+1]) {
             appendWords(x, y+1, build, visited);
         }
 
         // check the position above
-        if (!visited[x][y-1] && y-1 >= 0) {
+        if (y-1 >= 0 && !visited[x][y-1]) {
             appendWords(x, y-1, build, visited);
         }
 
         // check the position left and down
-        if (!visited[x+1][y+1] && x+1 < rows && y+1 < cols) {
+        if (x+1 < cols && y+1 < rows && !visited[x+1][y+1]) {
             appendWords(x+1, y+1, build, visited);
         }
 
         // check the position left and up
-        if (!visited[x+1][y-1] && x+1 < rows && y-1 >= 0) {
+        if (x+1 < cols && y-1 >= 0 && !visited[x+1][y-1]) {
             appendWords(x+1, y-1, build, visited);
         }
         
         // check the position right and down
-        if (!visited[x-1][y+1] && x-1 >= 0 && y+1 < cols) {
+        if (x-1 >= 0 && y+1 < rows && !visited[x-1][y+1]) {
             appendWords(x-1, y+1, build, visited);
         }
 
         // check the position right and up
-        if (!visited[x-1][y-1] && x-1 >= 0 && y-1 >= 0) {
+        if (x-1 >= 0 && y-1 >= 0 && !visited[x-1][y-1]) {
             appendWords(x-1, y-1, build, visited);
         }
     }
