@@ -8,7 +8,7 @@ public class BoggleSolver {
     private int rows;
     private int cols;
     private BoggleBoard boggle;
-    private Queue<String> words;
+    private TST<Boolean> words;
 
     // Initializes the data structure using the given array of strings as the dictionary.
     // (You can assume each word in the dictionary contains only the uppercase letters A though Z.)
@@ -24,7 +24,7 @@ public class BoggleSolver {
         rows = board.rows();
         cols = board.cols();
         boggle = board;
-        words = new Queue<String>();
+        words = new TST<Boolean>();
         for (int x = 0; x < cols; x++) {
             for (int y = 0; y < rows; y++) {
                 boolean[][] visited = new boolean[cols][rows];
@@ -37,18 +37,22 @@ public class BoggleSolver {
                 appendWords(x, y, build, visited);
             }
         }
-        return words;
+        return words.keys();
     }
 
     private void appendWords(int x, int y, StringBuilder build, boolean[][] visited) {
         // add current letter to string and mark position as visited
-        build.append(boggle.getLetter(y, x)); 
+        char letter = boggle.getLetter(y, x);
+        build.append(letter);
+        if (letter == 'Q') {
+           build.append("U");
+        }
         visited[x][y] = true;
 
         // if the new string is in the dictionary and >= 3 characters, add to words list
         String current = build.toString();
-        if (contains(current) && current.length() >= 3) {
-            words.enqueue(current);
+        if (contains(current) && !wordsContains(current) && current.length() >= 3) {
+            words.put(current, true);
         }
 
         // if there are no words with the current string as a prefix, stop searching from this
@@ -63,6 +67,9 @@ public class BoggleSolver {
             // undo the visit to the next tile
             visited[x+1][y] = false;
             build.deleteCharAt(build.length() - 1);
+            if (build.charAt(build.length() - 1) == 'Q') {
+                build.deleteCharAt(build.length() - 1);
+            }
         }
 
         // check the position to the left
@@ -71,6 +78,9 @@ public class BoggleSolver {
             // undo the visit to the next tile
             visited[x-1][y] = false;
             build.deleteCharAt(build.length() - 1);
+            if (build.charAt(build.length() - 1) == 'Q') {
+                build.deleteCharAt(build.length() - 1);
+            }
         }
 
         // check the position below
@@ -79,6 +89,9 @@ public class BoggleSolver {
             // undo the visit to the next tile
             visited[x][y+1] = false;
             build.deleteCharAt(build.length() - 1);
+            if (build.charAt(build.length() - 1) == 'Q') {
+                build.deleteCharAt(build.length() - 1);
+            }
         }
 
         // check the position above
@@ -87,6 +100,9 @@ public class BoggleSolver {
             // undo the visit to the next tile
             visited[x][y-1] = false;
             build.deleteCharAt(build.length() - 1);
+            if (build.charAt(build.length() - 1) == 'Q') {
+                build.deleteCharAt(build.length() - 1);
+            }
         }
 
         // check the position right and down
@@ -95,6 +111,9 @@ public class BoggleSolver {
             // undo the visit to the next tile
             visited[x+1][y+1] = false;
             build.deleteCharAt(build.length() - 1);
+            if (build.charAt(build.length() - 1) == 'Q') {
+                build.deleteCharAt(build.length() - 1);
+            }
         }
 
         // check the position right and up
@@ -103,6 +122,9 @@ public class BoggleSolver {
             // undo the visit to the next tile
             visited[x+1][y-1] = false;
             build.deleteCharAt(build.length() - 1);
+            if (build.charAt(build.length() - 1) == 'Q') {
+                build.deleteCharAt(build.length() - 1);
+            }
         }
         
         // check the position left and down
@@ -111,6 +133,9 @@ public class BoggleSolver {
             // undo the visit to the next tile
             visited[x-1][y+1] = false;
             build.deleteCharAt(build.length() - 1);
+            if (build.charAt(build.length() - 1) == 'Q') {
+                build.deleteCharAt(build.length() - 1);
+            }
         }
 
         // check the position left and up
@@ -119,6 +144,9 @@ public class BoggleSolver {
             // undo the visit to the next tile
             visited[x-1][y-1] = false;
             build.deleteCharAt(build.length() - 1);
+            if (build.charAt(build.length() - 1) == 'Q') {
+                build.deleteCharAt(build.length() - 1);
+            }
         }
     }
 
@@ -142,6 +170,10 @@ public class BoggleSolver {
 
     private boolean contains(String word) {
         return dict.contains(word);
+    }
+
+    private boolean wordsContains(String word) {
+        return words.contains(word);
     }
 
     // Test client that takes the filename of a dictionary and the filename of a Boggle board as
