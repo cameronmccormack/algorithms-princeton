@@ -42,7 +42,7 @@ public class BoggleSolver {
 
     private void appendWords(int x, int y, StringBuilder build, boolean[][] visited) {
         // add current letter to string and mark position as visited
-        build.append(boggle.getLetter(y, x));
+        build.append(boggle.getLetter(y, x)); 
         visited[x][y] = true;
 
         // if the new string is in the dictionary and >= 3 characters, add to words list
@@ -60,41 +60,65 @@ public class BoggleSolver {
         // check the position to the right
         if (x+1 < cols && !visited[x+1][y]) {
             appendWords(x+1, y, build, visited);
+            // undo the visit to the next tile
+            visited[x+1][y] = false;
+            build.deleteCharAt(build.length() - 1);
         }
 
         // check the position to the left
         if (x-1 >= 0 && !visited[x-1][y]) {
             appendWords(x-1, y, build, visited);
+            // undo the visit to the next tile
+            visited[x-1][y] = false;
+            build.deleteCharAt(build.length() - 1);
         }
 
         // check the position below
         if (y+1 < rows && !visited[x][y+1]) {
             appendWords(x, y+1, build, visited);
+            // undo the visit to the next tile
+            visited[x][y+1] = false;
+            build.deleteCharAt(build.length() - 1);
         }
 
         // check the position above
         if (y-1 >= 0 && !visited[x][y-1]) {
             appendWords(x, y-1, build, visited);
+            // undo the visit to the next tile
+            visited[x][y-1] = false;
+            build.deleteCharAt(build.length() - 1);
         }
 
         // check the position right and down
         if (x+1 < cols && y+1 < rows && !visited[x+1][y+1]) {
             appendWords(x+1, y+1, build, visited);
+            // undo the visit to the next tile
+            visited[x+1][y+1] = false;
+            build.deleteCharAt(build.length() - 1);
         }
 
         // check the position right and up
         if (x+1 < cols && y-1 >= 0 && !visited[x+1][y-1]) {
             appendWords(x+1, y-1, build, visited);
+            // undo the visit to the next tile
+            visited[x+1][y-1] = false;
+            build.deleteCharAt(build.length() - 1);
         }
         
         // check the position left and down
         if (x-1 >= 0 && y+1 < rows && !visited[x-1][y+1]) {
             appendWords(x-1, y+1, build, visited);
+            // undo the visit to the next tile
+            visited[x-1][y+1] = false;
+            build.deleteCharAt(build.length() - 1);
         }
 
         // check the position left and up
         if (x-1 >= 0 && y-1 >= 0 && !visited[x-1][y-1]) {
             appendWords(x-1, y-1, build, visited);
+            // undo the visit to the next tile
+            visited[x-1][y-1] = false;
+            build.deleteCharAt(build.length() - 1);
         }
     }
 
