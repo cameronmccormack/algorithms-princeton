@@ -7,17 +7,17 @@ public class MoveToFront {
     // apply move-to-front encoding, reading from standard input and writing to standard output
     public static void encode() {
         char[] chars = initChars();
-        while (!BinaryStdIn.isEmpty()) {
-            char c = BinaryStdIn.readChar();
-            char in;
-            char out = chars[0];
+        String str = BinaryStdIn.readString();
+        char[] inputChars = str.toCharArray();
+        for (char c : inputChars) {
+            char temp;
             int i = 0;
             while (c != chars[i]) {
-                in = chars[i];
-                chars[i++] = out;
-                out = in;
+                temp = chars[i];
+                chars[i+1] = temp;
+                i++;
             }
-            chars[i] = out;
+            chars[i+1] = temp;
             BinaryStdOut.write(i, 8);
             chars[0] = (char) i;
         }
