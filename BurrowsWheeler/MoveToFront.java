@@ -49,14 +49,14 @@ public class MoveToFront {
     }
 
     // if args[0] is "-" apply move-to-front encoding
-    // if args[1] is "+" apply move-to-front decoding
+    // if args[0] is "+" apply move-to-front decoding
     public static void main(String[] args) {
         if (args.length != 1) {
             throw new IllegalArgumentException();
         }
-        if (args[0] == "+") {
+        if (args[0].equals("+")) {
             decode();
-        } else if (args[0] == "-") {
+        } else if (args[0].equals("-")) {
             encode();
         } else {
             throw new IllegalArgumentException();
