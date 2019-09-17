@@ -11,3 +11,4 @@ This repository contains code for the exercises of Robert Sedgewick and Kevin Wa
 * Seam carving (content-aware image resizing) using a shortest-path algorithm.
 * Determining which teams in a sports division are mathematically eliminated from contention using maximum flow and minimum cut algorithms.
 * Finding all valid words in a generalised n-by-n game of Boggle using ternary search tries.
+* Data compression using the Burrows-Wheeler transform.
