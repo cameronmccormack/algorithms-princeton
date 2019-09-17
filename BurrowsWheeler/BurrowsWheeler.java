@@ -41,10 +41,10 @@ public class BurrowsWheeler {
         int first = BinaryStdIn.readInt();
         String str = BinaryStdIn.readString();
         char[] chars = str.toCharArray();
-        int next[] = new int[chars.length];
+        int[] next = new int[chars.length];
         ST<Character, Queue<Integer>> positions = new ST<Character, Queue<Integer>>();
         for (int i = 0; i < chars.length; i++) {
-            if(!positions.contains(chars[i])) {
+            if (!positions.contains(chars[i])) {
                 positions.put(chars[i], new Queue<Integer>());
             }
             positions.get(chars[i]).enqueue(i);
