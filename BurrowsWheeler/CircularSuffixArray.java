@@ -19,8 +19,10 @@ public class CircularSuffixArray {
         }
         index = new int[length];
         int i = 0;
-        for (String key : circulations.keys()) {
-            index[i++] = circulations.get(key);
+        if (length > 0) {
+            for (String key : circulations.keys()) {
+                index[i++] = circulations.get(key);
+            }
         }
     }
 
@@ -31,8 +33,8 @@ public class CircularSuffixArray {
 
     // returns index of ith sorted suffix
     public int index(int i) {
-        if (i < 0 || i >= length) {
-            throw new IndexOutOfBoundsException();
+        if (i < 0 || i >= length || length == 0) {
+            throw new IllegalArgumentException();
         }
         return index[i];
     }
