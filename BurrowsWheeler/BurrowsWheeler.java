@@ -31,7 +31,7 @@ public class BurrowsWheeler {
         if (offset > 0) {
             return s.charAt(offset - 1);
         } else {
-            return s.charAt(s.charAt(s.length() - 1));
+            return s.charAt(s.length() - 1);
         }
     }
 
