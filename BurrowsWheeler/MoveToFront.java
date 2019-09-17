@@ -18,7 +18,7 @@ public class MoveToFront {
                 out = in;
             }
             chars[i] = out;
-            BinaryStdOut.write(i);
+            BinaryStdOut.write(i, 8);
             chars[0] = (char) i;
         }
         BinaryStdOut.close();
