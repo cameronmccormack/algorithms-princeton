@@ -1,41 +1,51 @@
 import edu.princeton.cs.algs4.BinaryStdIn;
 import edu.princeton.cs.algs4.BinaryStdOut;
 
+import edu.princeton.cs.algs4.StdOut;
+
 public class MoveToFront {
     private static final int R = 256; // ASCII
 
     // apply move-to-front encoding, reading from standard input and writing to standard output
     public static void encode() {
-        char[] chars = initChars();
-        String str = BinaryStdIn.readString();
-        char[] inputChars = str.toCharArray();
-        for (char c : inputChars) {
-            char temp;
-            int i = 0;
-            while (c != chars[i]) {
-                temp = chars[i];
-                chars[i+1] = temp;
-                i++;
-            }
-            chars[i+1] = temp;
-            BinaryStdOut.write(i, 8);
-            chars[0] = (char) i;
-        }
-        BinaryStdOut.close();
-    }
-
-    // creates an array with the ASCII characters 0 to 255 in sequence
-    private static char[] initChars() {
+        // create an array with the ASCII characters in sequence
         char[] chars = new char[R];
         for (int i = 0; i < R; i++) {
             chars[i] = (char) i;
         }
-        return chars;
+
+        // read charaters from standard input and count how many positions into the array
+        // the character is found
+        char c;
+        while (!BinaryStdIn.isEmpty()) {
+            c = BinaryStdIn.readChar();
+            int i = 0;
+            while (chars[i] != c) {
+                i++;
+            }
+            BinaryStdOut.write((char) i);
+            // move all characters preceding searched character across one position and
+            // put searched character at the start
+            while (i > 0) {
+                chars[i] = chars[--i];
+            }
+            chars[0] = c;
+        }
+        BinaryStdIn.close();
+        BinaryStdOut.close();
     }
+
+    // creates an array with the ASCII characters 0 to 255 in sequence
+ //   private static char[] initChars() {
+   //     return chars;
+   // }
 
     // apply move-to-front decoding, reading from standard input and writing to standard output
     public static void decode() {
-        char[] chars = initChars();
+        char[] chars = new char[R];
+        for (char i = 0; i < R; i++) {
+            chars[i] = i;
+        }
         while (!BinaryStdIn.isEmpty()) {
             char i = BinaryStdIn.readChar();
             BinaryStdOut.write(chars[i], 8);
