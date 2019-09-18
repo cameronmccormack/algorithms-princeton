@@ -52,17 +52,26 @@ public class CircularSuffixArray {
         StdOut.printf("Length is %d (should be 7).\n", csa.length());
         StdOut.print("Index positions of CSA are: ");
         for (int i = 0; i < csa.length(); i++) {
-            StdOut.print(csa.index(i));
+            StdOut.printf("%d ", csa.index(i));
         }
-        StdOut.println(" (should be 1032645).\n");
+        StdOut.println("\n(should be                  1 0 3 2 6 4 5).\n");
 
         CircularSuffixArray csa2 = new CircularSuffixArray("COUSCOUS");
         StdOut.println("Input string is COUSCOUS.");
         StdOut.printf("Length is %d (should be 8).\n", csa2.length());
         StdOut.print("Index positions of CSA are: ");
         for (int i = 0; i < csa2.length(); i++) {
-            StdOut.print(csa2.index(i));
+            StdOut.printf("%d ", csa2.index(i));
         }
-        StdOut.println(" (should be 04153726).");
+        StdOut.println("\n(should be:                 0 4 1 5 3 7 2 6).\n");
+
+        CircularSuffixArray csa3 = new CircularSuffixArray("aaaaaaaaaaaa");
+        StdOut.println("Input string is aaaaaaaaaaaa.");
+        StdOut.printf("Length is %d (should be 8).\n", csa3.length());
+        StdOut.print("Index positions of CSA are: ");
+        for (int i = 0; i < csa3.length(); i++) {
+            StdOut.printf("%d ", csa3.index(i));
+        }
+        StdOut.println("\n(should be:                 0 1 2 3 4 5 6 7 8 9 10 11).");
     }
 }
