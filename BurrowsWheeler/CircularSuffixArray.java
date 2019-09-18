@@ -4,7 +4,6 @@ import edu.princeton.cs.algs4.StdOut;
 public class CircularSuffixArray {
     private int length;
     private int[] index;
-    private ST<String, Integer> circulations;
 
     // circular suffix array of s
     public CircularSuffixArray(String s) {
@@ -12,10 +11,17 @@ public class CircularSuffixArray {
             throw new IllegalArgumentException();
         }
         length = s.length();
-        circulations = new ST<String, Integer>();
+        ST<String, Integer> circulations = new ST<String, Integer>();
         circulations.put(s, 0);
         for (int i = 1; i < length; i++) {
-            circulations.put(s.substring(i, length) + s.substring(0, i), i);
+            String current = s.substring(i, length) + s.substring(0, i);
+            // if string is already a key, add an a to the end to make it the next
+            // sequential position. as all keys are of equal length, there is no risk of
+            // this resulting in a collision with another unique key
+            while (circulations.get(current) != null) {
+                current = current + "a";
+            }
+            circulations.put(current, i);
         }
         index = new int[length];
         int i = 0;
@@ -48,6 +54,15 @@ public class CircularSuffixArray {
         for (int i = 0; i < csa.length(); i++) {
             StdOut.print(csa.index(i));
         }
-        StdOut.println(" (should be 1032645).");
+        StdOut.println(" (should be 1032645).\n");
+
+        CircularSuffixArray csa2 = new CircularSuffixArray("COUSCOUS");
+        StdOut.println("Input string is COUSCOUS.");
+        StdOut.printf("Length is %d (should be 8).\n", csa2.length());
+        StdOut.print("Index positions of CSA are: ");
+        for (int i = 0; i < csa2.length(); i++) {
+            StdOut.print(csa2.index(i));
+        }
+        StdOut.println(" (should be 04153726).");
     }
 }
