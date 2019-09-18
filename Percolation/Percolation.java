@@ -1,8 +1,9 @@
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
-    private int n, numOpenSites;
-    private WeightedQuickUnionUF uf, uf2;
+    private final int n;
+    private int numOpenSites;
+    private final WeightedQuickUnionUF uf, uf2;
     private boolean[] blocked;
 
     public Percolation(int num) {
@@ -13,10 +14,9 @@ public class Percolation {
 
         // create n-by-n grid, with all sites blocked
         n = num;
-        uf = new WeightedQuickUnionUF(n*n+2); // 2 extra virtual sites, used to check percolation status
-        uf2 = new WeightedQuickUnionUF(n*n+1); // 1 extra virtual site, used to check full cells
+        uf = new WeightedQuickUnionUF(n*n+2); // 2 extra virtual sites (check percolation status)
+        uf2 = new WeightedQuickUnionUF(n*n+1); // 1 extra virtual site (check full cells)
         blocked = new boolean[n*n+2]; // 2 extra virtual sites
-
         for (int i = 1; i <= n*n; ++i) {
             blocked[i] = true;
         }
@@ -25,16 +25,16 @@ public class Percolation {
         numOpenSites = 0;
     }
 
+    // return index of array site
     private int index(int row, int col) {
-        // return index of array site
         if (row <= 0 || row > n || col <= 0 || col > n) {
             throw new IllegalArgumentException();
         }
         return (row-1)*n + col;
     }
     
+    // open site (row, col) if it is not open already
     public void open(int row, int col) {
-        // open site (row, col) if it is not open already
         int id = index(row, col);
         if (!isOpen(row, col)) {
             numOpenSites++;
@@ -73,23 +73,23 @@ public class Percolation {
         }
     }
 
+    // check if site is open
     public boolean isOpen(int row, int col) {
-        // check if site is open
         return !blocked[index(row, col)];
     }
 
+    // check if site is full
     public boolean isFull(int row, int col) {
-        // check if site is full
         return uf2.connected(0, index(row, col));
     }
 
+    // number of open sites
     public int numberOfOpenSites() {
-        // number of open sites
         return numOpenSites;
     }
 
+    // check if the system percolates
     public boolean percolates() {
-        // check if the system percolates
         return uf.connected(0, n*n+1);
     }
 }

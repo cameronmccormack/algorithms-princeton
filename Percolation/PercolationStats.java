@@ -2,23 +2,20 @@ import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
 
 public class PercolationStats {
-    private double[] ratio;
-    private int trials, numSites;
-    private double conf = 1.96; // 95 % confidence level
-    private double sd, av, sqrtTrials;
+    private static final double CONF = 1.96; // 95 % confidence level
+    private final double sd, av, sqrtTrials;
 
     public PercolationStats(int n, int trls) {
         if (n <= 0 || trls <= 0) {
             throw new IllegalArgumentException();
         }
 
-        trials = trls;
-        sqrtTrials = Math.sqrt(trials);
-        ratio = new double[trials];
-        numSites = n*n;
+        sqrtTrials = Math.sqrt(trls);
+        double[] ratio = new double[trls];
+        int numSites = n*n;
 
         // perform trials on n x n grid
-        for (int t = 0; t < trials; t++) {
+        for (int t = 0; t < trls; t++) {
             Percolation p = new Percolation(n);
             int[] perm = StdRandom.permutation(numSites);
             int i = 0; // counting index for permutation
@@ -35,25 +32,27 @@ public class PercolationStats {
         av = StdStats.mean(ratio);
     }
 
+    // sample mean of percolation threshold
     public double mean() {
-        // sample mean of percolation threshold
         return av;
     }
 
+    // sample standard deviation of percolation threshold
     public double stddev() {
         return sd;
     }
 
+    // lower bound of 95% confidence interval
     public double confidenceLo() {
-        // lower bound of 95% confidence interval
-        return av - conf * sd / sqrtTrials;
+        return av - CONF * sd / sqrtTrials;
     }
 
+    // upper bound of 95% confidence interval
     public double confidenceHi() {
-        // upper bound of 95% confidence interval
-        return av + conf * sd / sqrtTrials;
+        return av + CONF * sd / sqrtTrials;
     }
 
+    // unit test
     public static void main(String[] args) {
         int n = Integer.parseInt(args[0]);
         int testCase = Integer.parseInt(args[1]);
