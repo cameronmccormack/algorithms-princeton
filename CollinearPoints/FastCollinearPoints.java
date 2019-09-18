@@ -2,8 +2,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class FastCollinearPoints {
-    private double err = 0.00000001;
-    private ArrayList<LineSegment> segs = new ArrayList<>();
+    private final ArrayList<LineSegment> segs = new ArrayList<>();
 
     public FastCollinearPoints(Point[] points) {        
         // check if whole array is null
@@ -36,9 +35,8 @@ public class FastCollinearPoints {
         for (int i = 0; i < copy.length - 3; i++) {
             // Sort the points according to the slopes they makes with p.
             // If any 3 (or more) adjacent points in the sorted order have
-            // equal slopes with respect to p these points, together with
+            // equal slopes with respect to p then these points, together with
             // p, are collinear.
-
             Arrays.sort(copy, copy[i].slopeOrder());
 
             for (int p = 0, first = 1, last = 2; last < copy.length; last++) {

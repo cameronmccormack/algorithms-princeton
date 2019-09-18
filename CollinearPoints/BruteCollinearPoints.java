@@ -2,8 +2,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class BruteCollinearPoints {
-    private double err = 0.00000001;
-    private ArrayList<LineSegment> segs = new ArrayList<>();
+    private static final double ERR = 0.00000001;
+    private final ArrayList<LineSegment> segs = new ArrayList<>();
 
     public BruteCollinearPoints(Point[] points) {
         // check if whole array is null
@@ -46,7 +46,7 @@ public class BruteCollinearPoints {
                         slope1 = copy[i].slopeTo(copy[j]);
                         slope2 = copy[i].slopeTo(copy[k]);
                         slope3 = copy[i].slopeTo(copy[l]);
-                        if (Math.abs(slope1 - slope2) < err && Math.abs(slope1 - slope3) < err) {
+                        if (Math.abs(slope1 - slope2) < ERR && Math.abs(slope1 - slope3) < ERR) {
                             segs.add(new LineSegment(copy[i], copy[l]));
                         } else if (slope1 == Double.POSITIVE_INFINITY && slope2 == Double.POSITIVE_INFINITY && slope3 == Double.POSITIVE_INFINITY) {
                             segs.add(new LineSegment(copy[i], copy[l]));
