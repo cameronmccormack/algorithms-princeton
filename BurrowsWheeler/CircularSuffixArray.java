@@ -1,5 +1,6 @@
 import edu.princeton.cs.algs4.ST;
 import edu.princeton.cs.algs4.StdOut;
+import edu.princeton.cs.algs4.Queue;
 
 public class CircularSuffixArray {
     private int length;
@@ -11,23 +12,23 @@ public class CircularSuffixArray {
             throw new IllegalArgumentException();
         }
         length = s.length();
-        ST<String, Integer> circulations = new ST<String, Integer>();
-        circulations.put(s, 0);
+        ST<String, Queue<Integer>> circulations = new ST<String, Queue<Integer>>();
+        circulations.put(s, new Queue<Integer>());
+        circulations.get(s).enqueue(0);
         for (int i = 1; i < length; i++) {
             String current = s.substring(i, length) + s.substring(0, i);
-            // if string is already a key, add an a to the end to make it the next
-            // sequential position. as all keys are of equal length, there is no risk of
-            // this resulting in a collision with another unique key
-            while (circulations.get(current) != null) {
-                current = current + "a";
+            if (circulations.get(current) == null) {
+                circulations.put(current, new Queue<Integer>());
             }
-            circulations.put(current, i);
+            circulations.get(current).enqueue(i);
         }
         index = new int[length];
         int i = 0;
         if (length > 0) {
             for (String key : circulations.keys()) {
-                index[i++] = circulations.get(key);
+                while (!circulations.get(key).isEmpty()) {
+                    index[i++] = circulations.get(key).dequeue();
+                }
             }
         }
     }
