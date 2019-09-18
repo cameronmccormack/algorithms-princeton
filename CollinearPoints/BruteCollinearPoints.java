@@ -33,7 +33,8 @@ public class BruteCollinearPoints {
             copy[i] = points[i];
         }
 
-        // sort array of points so that the line segment through any 4 points is always between the first and last point in the array
+        // sort array of points so that the line segment through any 4 points is always
+        // between the first and last point in the array
         Arrays.sort(copy);
 
         // if slopes between 4 points are the same, add line segment between first and last point to list
@@ -48,7 +49,9 @@ public class BruteCollinearPoints {
                         slope3 = copy[i].slopeTo(copy[l]);
                         if (Math.abs(slope1 - slope2) < ERR && Math.abs(slope1 - slope3) < ERR) {
                             segs.add(new LineSegment(copy[i], copy[l]));
-                        } else if (slope1 == Double.POSITIVE_INFINITY && slope2 == Double.POSITIVE_INFINITY && slope3 == Double.POSITIVE_INFINITY) {
+                        } else if (slope1 == Double.POSITIVE_INFINITY
+                                   && slope2 == Double.POSITIVE_INFINITY
+                                   && slope3 == Double.POSITIVE_INFINITY) {
                             segs.add(new LineSegment(copy[i], copy[l]));
                         }
                     }
