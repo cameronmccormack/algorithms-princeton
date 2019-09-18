@@ -1,8 +1,9 @@
 import edu.princeton.cs.algs4.StdIn;
 
+// reads a sequence of strings and prints k of them at random
 public class Permutation {
     public static void main(String[] args) {
-		
+        
         int k = Integer.parseInt(args[0]);
 
         RandomizedQueue<String> q = new RandomizedQueue<String>();

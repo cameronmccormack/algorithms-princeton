@@ -85,7 +85,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     // class for iterator
     private class ArrayIterator implements Iterator<Item> {
         private int i = 0;
-        private int[] perm = new int[n];
+        private final int[] perm = new int[n];
 
         public ArrayIterator() {
             for (int j = 0; j < n; ++j) {
