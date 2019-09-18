@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.TreeSet;
 
 public class PointSET {
-    private TreeSet<Point2D> points;
+    private final TreeSet<Point2D> points;
 
     // construct an empty set of points
     public PointSET() {
@@ -96,6 +96,6 @@ public class PointSET {
 
     // quick test
     public static void main(String[] args) {
-
+        // to do
     }
 }

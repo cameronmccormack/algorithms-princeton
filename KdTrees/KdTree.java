@@ -13,8 +13,8 @@ public class KdTree {
     private Node root;
 
     private class Node {
-        private Point2D p;
-        private RectHV rect;
+        private final Point2D p;
+        private final RectHV rect;
         private Node left;
         private Node right;
 
@@ -55,21 +55,20 @@ public class KdTree {
         if (p == null) {
             throw new IllegalArgumentException();
         }
-        return (isIn(root, p, 0) != null);
+        return (pointIn(root, p, 0) != null);
     }
     
-    private Point2D isIn(Node node, Point2D p, int level) {
+    private Point2D pointIn(Node node, Point2D p, int level) {
         while (node != null) {
             int compare = compare(p, node.p, level);
             if (compare < 0) {
-                return isIn(node.left, p, level + 1);
+                return pointIn(node.left, p, level + 1);
             } else if (compare > 0) {
-                return isIn(node.right, p, level + 1);
+                return pointIn(node.right, p, level + 1);
             } else {
                 return node.p;
             }
         }
-
         return null;
     }
 
@@ -143,6 +142,9 @@ public class KdTree {
 
     // all points that are inside the rectangle (or on the boundary)
     public Iterable<Point2D> range(RectHV rect) {
+        if (rect == null) {
+            throw new IllegalArgumentException();
+        }
         LinkedList<Point2D> list = new LinkedList<Point2D>();
         rangeAdd(root, rect, list);
         return list;
@@ -160,6 +162,9 @@ public class KdTree {
 
     // a nearest neighbour in the set to point p
     public Point2D nearest(Point2D p) {
+        if (p == null) {
+            throw new IllegalArgumentException();
+        }
         if (isEmpty()) {
             return null;
         } else {
