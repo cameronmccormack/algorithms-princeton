@@ -1,4 +1,4 @@
-import edu.princeton.cs.algs4.ST;
+import edu.princeton.cs.algs4.RedBlackBST;
 import edu.princeton.cs.algs4.StdOut;
 import edu.princeton.cs.algs4.Queue;
 
@@ -12,12 +12,12 @@ public class CircularSuffixArray {
             throw new IllegalArgumentException();
         }
         length = s.length();
-        ST<String, Queue<Integer>> circulations = new ST<String, Queue<Integer>>();
+        RedBlackBST<String, Queue<Integer>> circulations = new RedBlackBST<String, Queue<Integer>>();
         circulations.put(s, new Queue<Integer>());
         circulations.get(s).enqueue(0);
         for (int i = 1; i < length; i++) {
             String current = s.substring(i, length) + s.substring(0, i);
-            if (circulations.get(current) == null) {
+            if (!circulations.contains(current)) {
                 circulations.put(current, new Queue<Integer>());
             }
             circulations.get(current).enqueue(i);
