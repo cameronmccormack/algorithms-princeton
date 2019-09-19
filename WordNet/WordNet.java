@@ -5,10 +5,9 @@ import edu.princeton.cs.algs4.Bag;
 import edu.princeton.cs.algs4.DirectedCycle;
 
 public class WordNet {
-    private Digraph digraph;
-    private ST<String, Bag<Integer>> wordIndex;
-    private ST<Integer, String> idIndex;
-    private SAP sap;
+    private final ST<String, Bag<Integer>> wordIndex;
+    private final ST<Integer, String> idIndex;
+    private final SAP sap;
 
     // constructor takes the name of the two input files
     public WordNet(String synsets, String hypernyms) {
@@ -36,7 +35,7 @@ public class WordNet {
         }
 
         // create a digraph that contains all hypernym links
-        digraph = new Digraph(idIndex.size());
+        Digraph digraph = new Digraph(idIndex.size());
         while (inHypernyms.hasNextLine()) {
             String[] splitHypernyms = inHypernyms.readLine().split(",");
             int source = Integer.parseInt(splitHypernyms[0]);
