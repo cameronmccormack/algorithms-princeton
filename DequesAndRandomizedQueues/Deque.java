@@ -140,7 +140,9 @@ public class Deque<Item> implements Iterable<Item> {
     public static void main(String[] args) {
         Deque<String> queue = new Deque<String>();
         System.out.println(queue.isEmpty());
+        System.out.println("^ This should be true (queue is empty).\n");
         System.out.println(queue.size());
+        System.out.println("^ This should be 0 (queue is empty; size is zero).\n");
         queue.addLast("b");
         queue.addFirst("a");
         queue.addLast("c");
@@ -150,10 +152,13 @@ public class Deque<Item> implements Iterable<Item> {
         queue.removeFirst();
         queue.removeLast();
         System.out.println(queue.isEmpty());
+        System.out.println("^ This should be false (queue is not empty).\n");
         System.out.println(queue.size());
+        System.out.println("^ This should be 2 (5 items added and 3 removed).\n");
 
-        for (String s: queue) {
+        for (String s : queue) {
             System.out.println(s);
         }
+        System.out.println("^ Items in queue should be: b, c.");
     }
 }
