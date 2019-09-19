@@ -11,7 +11,7 @@ public class SeamCarver {
         if (picture == null) {
             throw new IllegalArgumentException();
         }
-        pic = picture;
+        pic = new Picture(picture);
         energyMatrix();
     }
 
@@ -27,13 +27,8 @@ public class SeamCarver {
 
     // current picture
     public Picture picture() {
-        Picture temp = new Picture(pic.width(), pic.height());
-        for (int x = 0; x < pic.width(); x++) {
-            for (int y = 0; y < pic.height(); y++) {
-                temp.set(x, y, pic.get(x, y));
-            }
-        }
-        return temp;
+        Picture picCopy = new Picture(pic);
+        return picCopy;
     }
 
     // width of current picture
