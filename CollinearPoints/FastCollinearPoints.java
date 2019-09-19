@@ -42,22 +42,18 @@ public class FastCollinearPoints {
             // equal slopes with respect to p then these points, together with
             // p, are collinear.
             Arrays.sort(copy, copy[i].slopeOrder());
-
-            for (int p = 0, first = 1, last = 2; last < copy.length; last++) {
-                // find last collinear to p point
-                while (last < copy.length
-                        && Double.compare(copy[p].slopeTo(copy[first]), copy[p].slopeTo(copy[last])) == 0) {
-                    last++;
-                }
-                // if found at least 3 elements, make segment if it's unique
-                if (last - first >= 3 && copy[p].compareTo(copy[first]) < 0) {
-                    segs.add(new LineSegment(copy[p], copy[last - 1]));
-                }
-                // Try to find next
-                first = last;
+            
+            int last = 2;
+            // find last collinear to p point
+            while (last < copy.length
+                    && Double.compare(copy[0].slopeTo(copy[1]), copy[0].slopeTo(copy[last])) == 0) {
+                last++;
+            }
+            // if found at least 3 elements, make segment if it's unique
+            if (last >= 4 && copy[0].compareTo(copy[1]) < 0) {
+                segs.add(new LineSegment(copy[0], copy[last - 1]));
             }
         }
-        // finds all line segments containing 4 or more points
     }
 
     // the number of line segments
