@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class BaseballElimination {
+    private static final double ERR = 0.0000000001;
     private final int n;
     private String[] teams;
     private int[] wins;
@@ -132,7 +133,7 @@ public class BaseballElimination {
             // find certificate of elimination
             FordFulkerson ff = new FordFulkerson(G, 0, totalVertices - 1);
             for (FlowEdge e : G.adj(0)) {
-                if (e.flow() != e.capacity()) {
+                if (Math.pow(e.flow() - e.capacity(), 2) > ERR) {
                     eliminated[i] = true;
                     for (int j = 0; j < n; j++) {
                         if (j == i) {
