@@ -11,14 +11,14 @@ import java.util.ArrayList;
 public class BaseballElimination {
     private static final double ERR = 0.0000000001;
     private final int n;
-    private String[] teams;
-    private int[] wins;
-    private int[] losses;
-    private int[] remaining;
-    private int[][] against;
-    private boolean[] eliminated;
-    private ST<String, Integer> tags;
-    private List<SET<String>> certificate;
+    private final String[] teams;
+    private final int[] wins;
+    private final int[] losses;
+    private final int[] remaining;
+    private final  int[][] against;
+    private final boolean[] eliminated;
+    private final ST<String, Integer> tags;
+    private final List<SET<String>> certificate;
 
     // create a baseball division from given filename
     public BaseballElimination(String filename) {
