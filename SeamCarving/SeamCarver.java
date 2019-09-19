@@ -2,9 +2,9 @@ import edu.princeton.cs.algs4.Picture;
 import java.awt.Color;
 
 public class SeamCarver {
+    private static final double EDGE_ENERGY = 1000;
     private Picture pic;
     private double[][] energy;
-    private static final double EDGE_ENERGY = 1000;
 
     // create a seam carver object based on the given picture
     public SeamCarver(Picture picture) {
@@ -74,7 +74,7 @@ public class SeamCarver {
     public int[] findHorizontalSeam() {
         int[] seam = new int[pic.width()];
         double[][] distTo = new double[pic.width()][pic.height()];
-        int edgeTo[][] = new int[pic.width()][pic.height()];
+        int[][] edgeTo = new int[pic.width()][pic.height()];
 
         // initialise distTo all as infinity
         for (int x = 0; x < pic.width(); x++) {
@@ -141,7 +141,7 @@ public class SeamCarver {
     public int[] findVerticalSeam() {
         int[] seam = new int[pic.height()];
         double[][] distTo = new double[pic.width()][pic.height()];
-        int edgeTo[][] = new int[pic.width()][pic.height()];
+        int[][] edgeTo = new int[pic.width()][pic.height()];
 
         // initialise distTo all as infinity
         for (int x = 0; x < pic.width(); x++) {
